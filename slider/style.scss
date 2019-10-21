@@ -1,0 +1,123 @@
+body{
+margin: 0%;
+height: 5000px;
+}
+
+
+.container {
+  max-width: 1230px;
+  margin: 0 auto;
+}
+
+header {
+  width: 100%;
+  z-index: 2;
+
+  top: 0;
+  background: #4e3427;
+}
+
+#header2 {
+  position: fixed;
+  visibility: hidden;
+  width: 100%;
+  z-index: 2;
+  top: 0;
+  background: #4e3427;
+  
+}
+
+.header-content {
+  //Отступы нельзя присваивать блокам. Тогда еще один див?
+  display: flex; // Как его назвать?
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 15px 0px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+
+  
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-around;
+  width: 55%;
+  &__link {
+    
+
+    &:hover {
+      color: #c7b299; //Не слишком ли тупая вложенность?
+    }
+  }
+}
+
+.item{
+  display: none;
+
+  img{
+    width: 100%;
+    height: 300px;
+  }
+}
+
+.prev, .next {
+  cursor: pointer;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+  animation: go-left-right 3s infinite alternate;
+  -webkit-animation: go-left-right 3s infinite alternate;
+}
+
+@-webkit-keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+
+
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: #717171;
+}
