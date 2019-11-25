@@ -1,0 +1,1 @@
+import WelcomModal from './modal'

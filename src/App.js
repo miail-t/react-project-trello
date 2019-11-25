@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Main from './components/main/main';
-import Header from './components/header/header';
-import {
-  setLocalStorage,
-  getLocalStorage,
-} from './action/index';
-
+import Main from './components/Main/Main';
+import Header from './components/Header/Header';
 
 const columnsDefault = [
   { id: 1, name: 'TODO' },
@@ -17,19 +12,15 @@ const columnsDefault = [
 ];
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      actualUser: "",
-      users: [],
-      column: [],
-      cards: [],
-      comments: [],
-      isOpen: false,
-    }
+
+  state = {
+    actualUser: {},
+    users: [],
+    column: [],
+    cards: [],
+    comments: [],
+    isOpen: false,
   }
-
-
 
   componentDidMount() {
 
@@ -130,15 +121,12 @@ class App extends Component {
       users: users,
       isOpen: false
     })
-
-    alert(this.state.actualUser)
-
   }
 
   logOff = () => {
-    localStorage.setItem('actualUser', '')
+    localStorage.setItem('actualUser', {id: null ,name: ''})
     this.setState({
-      actualUser: localStorage.getItem('actualUser'),
+      actualUser: {id: null ,name: ''},
       isOpen: true,
     })
   }
@@ -204,11 +192,11 @@ class App extends Component {
   deleteComment = (id, autor) => {
     if (autor === this.state.actualUser.name) {
       const comments = this.state.comments.filter(
-        comment => id != comment.id
+        comment => id !== comment.id
       )
       localStorage.setItem('comments', JSON.stringify(comments))
       this.setState({
-        comments: comments
+        comments: JSON.parse(localStorage.getItem('comments'))
       })
     } else {
       alert("Вы не можети удалить чужой коментарий ")
@@ -221,17 +209,17 @@ class App extends Component {
     if (autor === this.state.actualUser.name) {
       let comments = this.state.comments.map(
         comment => {
-          if (id != comment.id) {
+          if (id !== comment.id) {
             comment.text = value
           }
           return comment
         }
-      ) 
+      )
       this.setState({
         comments: comments
       })
       localStorage.setItem('comments', JSON.stringify(this.state.comments))
-     
+
     } else {
       alert("Вы не можети редактировать чужой коментарий ")
     }
@@ -265,6 +253,7 @@ class App extends Component {
         <Header
           actualUser={this.state.actualUser}
           isOpen={this.state.isOpen}
+
           signIn={this.signIn}
           logOff={this.logOff}
         />
@@ -276,7 +265,7 @@ class App extends Component {
           editCard={this.editCard}
           addComment={this.addComment}
           deleteComment={this.deleteComment}
-          editComment = {this.editComment}
+          editComment={this.editComment}
           //props
           actualUser={this.state.actualUser}
           column={this.state.column}
