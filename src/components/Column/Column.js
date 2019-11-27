@@ -24,13 +24,26 @@ class Column extends Component {
     });
   };
 
-  editNameColumn = () => {
-    this.props.editNameColumn(this.props.id, this.state.columnNameValue);
-  };
-
   render() {
-    let card = this.props.cards.map(elem => {
-      if (this.props.id === elem.columnId) {
+    const {
+      id,
+      cards,
+      columnName,
+      actualUser,
+      comments,
+      deleteCard,
+      editCard,
+      addComment,
+      deleteComment,
+      editComment,
+      addCard,
+      editNameColumn
+    } = this.props;
+
+    const { columnNameValue, isOpenCreateCard } = this.state;
+
+    let card = cards.map(elem => {
+      if (id === elem.columnId) {
         return (
           <UserСard
             key={elem.id + elem.name}
@@ -38,16 +51,16 @@ class Column extends Component {
             id={elem.id}
             name={elem.name}
             text={elem.text}
-            columnName={this.props.columnName}
+            columnName={columnName}
             autor={elem.autor}
-            actualUser={this.props.actualUser}
-            comments={this.props.comments}
+            actualUser={actualUser}
+            comments={comments}
             //function
-            deleteCard={this.props.deleteCard}
-            editCard={this.props.editCard}
-            addComment={this.props.addComment}
-            deleteComment={this.props.deleteComment}
-            editComment={this.props.editComment}
+            deleteCard={deleteCard}
+            editCard={editCard}
+            addComment={addComment}
+            deleteComment={deleteComment}
+            editComment={editComment}
           />
         );
       }
@@ -60,14 +73,14 @@ class Column extends Component {
             className="inputColumn"
             plaintext
             onChange={this.valueChageHandler}
-            value={this.state.columnNameValue}
-            onBlur={this.editNameColumn}
+            value={columnNameValue}
+            onBlur={e => editNameColumn(id, columnNameValue)}
           />
           {card}
           <Button
             color="primary"
             onClick={e => {
-              this.changeIsOpenCreateCard(this.state.isOpenCreateCard);
+              this.changeIsOpenCreateCard(isOpenCreateCard);
             }}
           >
             Создать карточку
@@ -75,13 +88,13 @@ class Column extends Component {
         </Card>
         <ModalCard
           //function
-          addCard={this.props.addCard}
+          addCard={addCard}
           changeIsOpenCreateCard={this.changeIsOpenCreateCard}
           //props
-          isOpen={this.state.isOpenCreateCard}
-          autor={this.props.actualUser}
-          columnId={this.props.id}
-          columnName={this.props.columnName}
+          isOpen={isOpenCreateCard}
+          autor={actualUser}
+          columnId={id}
+          columnName={columnName}
         />
       </div>
     );

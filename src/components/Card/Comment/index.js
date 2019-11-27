@@ -14,28 +14,20 @@ class Comment extends Component {
   };
 
   render() {
+    const { id, autor, deleteComment, editComment } = this.props;
+    const {commentValue} = this.state;
     return (
       <div className="p-3 bg-warning my-2 rounded">
         <Toast>
-          <ToastHeader
-            toggle={() =>
-              this.props.deleteComment(this.props.id, this.props.autor)
-            }
-          >
-            {this.props.autor}
+          <ToastHeader toggle={() => deleteComment(id, autor)}>
+            {autor}
           </ToastHeader>
           <ToastBody>
             <Input
               plaintext
               onChange={this.valueChageHandler}
-              value={this.state.commentValue}
-              onBlur={() =>
-                this.props.editComment(
-                  this.props.id,
-                  this.props.autor,
-                  this.state.commentValue
-                )
-              }
+              value={commentValue}
+              onBlur={() => editComment(id, autor, commentValue)}
             />
           </ToastBody>
         </Toast>

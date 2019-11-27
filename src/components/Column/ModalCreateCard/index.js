@@ -11,10 +11,20 @@ import PropTypes from "prop-types";
 
 class ModalCard extends React.Component {
   render() {
+    const {
+      addCard,
+      autor,
+      columnId,
+      columnName,
+      changeIsOpenCreateCard,
+      isOpen
+    } = this.props;
     return (
       <div>
-        <Modal isOpen={this.props.isOpen}>
-          <ModalHeader>Создайте карту</ModalHeader>
+        <Modal isOpen={isOpen}>
+          <ModalHeader toggle={e => changeIsOpenCreateCard(isOpen)}>
+            Создайте карту
+          </ModalHeader>
           <ModalBody>
             <label>
               Card name
@@ -31,12 +41,8 @@ class ModalCard extends React.Component {
             <Button
               color="primary"
               onClick={e => {
-                this.props.addCard(
-                  this.props.autor.name,
-                  this.props.columnId,
-                  this.props.columnName
-                );
-                this.props.changeIsOpenCreateCard(this.props.isOpen);
+                addCard(autor.name, columnId, columnName);
+                changeIsOpenCreateCard(isOpen);
               }}
             >
               Создать карточку

@@ -12,9 +12,10 @@ import PropTypes from "prop-types";
 
 class WelcomModal extends React.Component {
   render() {
+    const { isOpen, signIn } = this.props;
     return (
       <div>
-        <Modal isOpen={this.props.isOpen}>
+        <Modal isOpen={isOpen}>
           <ModalHeader>А че ты такой не авторизованный?</ModalHeader>
           <ModalBody>
             Добавте свое имя, пожалуйста
@@ -23,7 +24,7 @@ class WelcomModal extends React.Component {
             </InputGroup>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.props.signIn}>
+            <Button color="primary" onClick={signIn}>
               Войти
             </Button>
           </ModalFooter>

@@ -6,22 +6,36 @@ import Column from "../Column/Column";
 
 class Main extends React.Component {
   render() {
+    const {
+      actualUser,
+      addCard,
+      editNameColumn,
+      deleteCard,
+      editCard,
+      addComment,
+      deleteComment,
+      editComment,
+      cards,
+      createCard,
+      comments
+    } = this.props;
+
     let column = this.props.column.map(elem => (
       <Column
         key={elem.name + elem.id}
-        actualUser={this.props.actualUser}
-        addCard={this.props.addCard}
-        editNameColumn={this.props.editNameColumn}
-        deleteCard={this.props.deleteCard}
-        editCard={this.props.editCard}
-        addComment={this.props.addComment}
-        deleteComment={this.props.deleteComment}
-        editComment={this.props.editComment}
+        actualUser={actualUser}
+        addCard={addCard}
+        editNameColumn={editNameColumn}
+        deleteCard={deleteCard}
+        editCard={editCard}
+        addComment={addComment}
+        deleteComment={deleteComment}
+        editComment={editComment}
         columnName={elem.name}
         id={elem.id}
-        cards={this.props.cards}
-        createCard={this.props.createCard}
-        comments={this.props.comments}
+        cards={cards}
+        createCard={createCard}
+        comments={comments}
       />
     ));
 

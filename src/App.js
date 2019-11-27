@@ -1,259 +1,246 @@
-import React, { Component } from 'react';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Main from './components/Main/Main';
-import Header from './components/Header/Header';
+import React, { Component } from "react";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Main from "./components/Main/Main";
+import Header from "./components/Header/Header";
 
 const columnsDefault = [
-  { id: 1, name: 'TODO' },
-  { id: 2, name: 'In Progress' },
-  { id: 3, name: 'Testing' },
-  { id: 4, name: 'Done' },
+  { id: 1, name: "TODO" },
+  { id: 2, name: "In Progress" },
+  { id: 3, name: "Testing" },
+  { id: 4, name: "Done" }
 ];
 
 class App extends Component {
-
   state = {
     actualUser: {},
     users: [],
     column: [],
     cards: [],
     comments: [],
-    isOpen: false,
-  }
+    isOpen: false
+  };
 
   componentDidMount() {
-
     if (!localStorage.getItem("actualUser")) {
       this.setState({
         isOpen: true
-      })
+      });
     } else {
       this.setState({
-        actualUser: JSON.parse(localStorage.getItem('actualUser'))
-      })
+        actualUser: JSON.parse(localStorage.getItem("actualUser"))
+      });
     }
     if (!localStorage.getItem("users")) {
-      localStorage.setItem('users', [])
+      localStorage.setItem("users", []);
     } else {
       this.setState({
-        user: JSON.parse(localStorage.getItem('users'))
-      })
+        user: JSON.parse(localStorage.getItem("users"))
+      });
     }
 
     if (!localStorage.getItem("column")) {
-      localStorage.setItem('column', JSON.stringify(columnsDefault))
+      localStorage.setItem("column", JSON.stringify(columnsDefault));
       this.setState({
-        column: JSON.parse(localStorage.getItem('column'))
-      })
+        column: JSON.parse(localStorage.getItem("column"))
+      });
     } else {
       this.setState({
-        column: JSON.parse(localStorage.getItem('column'))
-      })
+        column: JSON.parse(localStorage.getItem("column"))
+      });
     }
 
-    if (!localStorage.getItem('cards')) {
-      localStorage.setItem('cards', [])
+    if (!localStorage.getItem("cards")) {
+      localStorage.setItem("cards", []);
     } else {
       this.setState({
-        cards: JSON.parse(localStorage.getItem('cards'))
-      })
+        cards: JSON.parse(localStorage.getItem("cards"))
+      });
     }
 
-    if (!localStorage.getItem('comments')) {
-      localStorage.setItem('comments', [])
+    if (!localStorage.getItem("comments")) {
+      localStorage.setItem("comments", []);
     } else {
       this.setState({
-        comments: JSON.parse(localStorage.getItem('comments'))
-      })
+        comments: JSON.parse(localStorage.getItem("comments"))
+      });
     }
   }
 
-  createId = (value) => {
-    let maxId = 0
-    value.forEach(
-      (elem => {
-        if (elem.id > maxId) {
-          maxId = elem.id
-        }
+  createId = value => {
+    let maxId = 0;
+    value.forEach(elem => {
+      if (elem.id > maxId) {
+        maxId = elem.id;
       }
-      )
-    )
-    return maxId + 1
-  }
+    });
+    return maxId + 1;
+  };
 
   signIn = () => {
+    const { users } = this.state;
     let username = document.getElementById("input").value;
-    let users
-    let checkNewUser = true
+    let usersLocal;
+    let checkNewUser = true;
 
-    if (this.state.users !== null) {
-      this.state.users.forEach(
-        elem => {
-          if (elem.name === username) {
-            checkNewUser = false
-          }
+    if (users !== null) {
+      users.forEach(elem => {
+        if (elem.name === username) {
+          checkNewUser = false;
         }
-      )
+      });
     }
     if (checkNewUser === true) {
       const newUser = {
-        id: this.createId(this.state.users),
+        id: this.createId(users),
         name: username
-      }
-      users = this.state.users.concat(newUser)
-      localStorage.setItem('actualUser', JSON.stringify(newUser));
-      localStorage.setItem('users', JSON.stringify(users))
+      };
+      usersLocal = users.concat(newUser);
+      localStorage.setItem("actualUser", JSON.stringify(newUser));
+      localStorage.setItem("users", JSON.stringify(usersLocal));
       this.setState({
         actualUser: newUser
-      })
+      });
     } else {
-      let user = this.state.users.filter(elem => elem.name === username)
-      users = this.state.users.concat(user[0])
-      localStorage.setItem('actualUser', JSON.stringify(user[0]));
+      let user = users.filter(elem => elem.name === username);
+      usersLocal = users.concat(user[0]);
+      localStorage.setItem("actualUser", JSON.stringify(user[0]));
       this.setState({
         actualUser: user[0]
-      })
+      });
     }
-
 
     this.setState({
       users: users,
       isOpen: false
-    })
-  }
+    });
+  };
 
   logOff = () => {
-    localStorage.setItem('actualUser', {id: null ,name: ''})
+    localStorage.setItem("actualUser", { id: null, name: "" });
     this.setState({
-      actualUser: {id: null ,name: ''},
-      isOpen: true,
-    })
-  }
+      actualUser: { id: null, name: "" },
+      isOpen: true
+    });
+  };
 
   addCard = (autor, columnId, columnName) => {
+    const { cards } = this.state;
     const card = {
-      id: this.createId(this.state.cards),
-      name: document.getElementById('inputCardName').value,
-      text: document.getElementById('inputCardDescription').value,
-      autor: autor,
-      columnId: columnId,
-      columnName: columnName
-    }
-    const cards = this.state.cards.concat(card);
-    localStorage.setItem('cards', JSON.stringify(cards));
+      id: this.createId(cards),
+      name: document.getElementById("inputCardName").value,
+      text: document.getElementById("inputCardDescription").value,
+      autor,
+      columnId,
+      columnName
+    };
+    const cardsLocal = cards.concat(card);
+    localStorage.setItem("cards", JSON.stringify(cardsLocal));
     this.setState({
-      cards: cards
-    })
-  }
+      cards: cardsLocal
+    });
+  };
 
   deleteCard = (cardId, autor) => {
-    if (autor === this.state.actualUser.name) {
-      const cards = this.state.cards.filter(
-        card => card.id !== cardId
-      )
-      localStorage.setItem('cards', JSON.stringify(cards));
+    const { actualUser, cards } = this.state;
+    if (autor === actualUser.name) {
+      const cardsLocal = cards.filter(card => card.id !== cardId);
+      localStorage.setItem("cards", JSON.stringify(cardsLocal));
       this.setState({
-        cards: cards
-      })
+        cards: cardsLocal
+      });
     } else {
-      alert("Вы не можети удалить чужую карточку")
+      alert("Вы не можети удалить чужую карточку");
     }
-  }
+  };
 
   editCard = (id, valueName, valueDescription) => {
-    let cards = this.state.cards.map(
-      card => {
-        if (card.id === id) {
-          card.name = valueName
-          card.text = valueDescription
-        }
-        return card
+    const { cards } = this.state;
+    let cardsLocal = cards.map(card => {
+      if (card.id === id) {
+        card.name = valueName;
+        card.text = valueDescription;
       }
-    )
-    localStorage.setItem('cards', JSON.stringify(cards))
-    this.setState({ cards: cards })
-  }
+      return card;
+    });
+    localStorage.setItem("cards", JSON.stringify(cardsLocal));
+    this.setState({ cards: cardsLocal });
+  };
 
   addComment = (autor, text, idCard) => {
+    const { comments } = this.state;
     const comment = {
-      id: this.createId(this.state.comments),
-      autor: autor,
-      text: text,
-      idCard: idCard
-    }
-    let comments = this.state.comments.concat(comment)
+      id: this.createId(comments),
+      autor,
+      text,
+      idCard
+    };
+    let commentsLocal = comments.concat(comment);
     this.setState({
-      comments: comments
-    })
-    localStorage.setItem('comments', JSON.stringify(comments))
-  }
+      comments: commentsLocal
+    });
+    localStorage.setItem("comments", JSON.stringify(commentsLocal));
+  };
 
   deleteComment = (id, autor) => {
-    if (autor === this.state.actualUser.name) {
-      const comments = this.state.comments.filter(
+    const {comments,actualUser} = this.state
+    if (autor === actualUser.name) {
+      const commentsLocal = comments.filter(
         comment => id !== comment.id
       )
-      localStorage.setItem('comments', JSON.stringify(comments))
+      localStorage.setItem('comments', JSON.stringify(commentsLocal))
       this.setState({
         comments: JSON.parse(localStorage.getItem('comments'))
       })
     } else {
       alert("Вы не можети удалить чужой коментарий ")
     }
-
-
   }
+
 
   editComment = (id, autor, value) => {
-    if (autor === this.state.actualUser.name) {
-      let comments = this.state.comments.map(
-        comment => {
-          if (id !== comment.id) {
-            comment.text = value
-          }
-          return comment
+    const { comments, actualUser } = this.state;
+    if (autor === actualUser.name) {
+      let commentsLocal = comments.map(comment => {
+        if (id !== comment.id) {
+          comment.text = value;
         }
-      )
+        return comment;
+      });
       this.setState({
-        comments: comments
-      })
-      localStorage.setItem('comments', JSON.stringify(this.state.comments))
-
+        comments: commentsLocal
+      });
+      localStorage.setItem("comments", JSON.stringify(commentsLocal));
     } else {
-      alert("Вы не можети редактировать чужой коментарий ")
+      alert("Вы не можети редактировать чужой коментарий ");
     }
-  }
+  };
 
   editNameColumn = (columnId, value) => {
-    const columns = this.state.column.map(elem => {
+    const { column } = this.state;
+    const columns = column.map(elem => {
       if (elem.id === columnId) {
         const column = {
           id: elem.id,
           name: value
-        }
-        return column
+        };
+        return column;
       }
       return elem;
     });
-
-    alert(this.state.column)
-    alert(columns)
     this.setState({
       column: columns
-    })
-    localStorage.setItem('column', JSON.stringify(columns))
-    alert()
-  }
-
+    });
+    localStorage.setItem("column", JSON.stringify(columns));
+  };
 
   render() {
+    const { actualUser, isOpen, column, cards, comments } = this.state;
     return (
       <div className="App">
         <Header
-          actualUser={this.state.actualUser}
-          isOpen={this.state.isOpen}
-
+          actualUser={actualUser}
+          isOpen={isOpen}
           signIn={this.signIn}
           logOff={this.logOff}
         />
@@ -267,12 +254,11 @@ class App extends Component {
           deleteComment={this.deleteComment}
           editComment={this.editComment}
           //props
-          actualUser={this.state.actualUser}
-          column={this.state.column}
-          cards={this.state.cards}
-          comments={this.state.comments}
+          actualUser={actualUser}
+          column={column}
+          cards={cards}
+          comments={comments}
         />
-
       </div>
     );
   }

@@ -9,10 +9,11 @@ import {
   Button
 } from "reactstrap";
 import PropTypes from "prop-types";
-import WelcomModal from "../Modal/modal";
+import WelcomModal from "../WelcomModal/WelcomModal";
 
 class Header extends Component {
   render() {
+    const { actualUser, logOff, isOpen, signIn } = this.props;
     return (
       <div>
         <Navbar color="light" light expand="md">
@@ -21,16 +22,15 @@ class Header extends Component {
           <Collapse navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <span>{this.props.actualUser.name}</span>
-
-                <Button color="primary" onClick={this.props.logOff}>
+                <span>{actualUser.name}</span>
+                <Button color="primary" onClick={logOff}>
                   Выйти
                 </Button>
               </NavItem>
             </Nav>
           </Collapse>
         </Navbar>
-        <WelcomModal isOpen={this.props.isOpen} signIn={this.props.signIn} />
+        <WelcomModal isOpen={isOpen} signIn={signIn} />
       </div>
     );
   }

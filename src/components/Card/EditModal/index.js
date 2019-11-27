@@ -22,30 +22,31 @@ class ModalCard extends React.Component {
     }
   };
 
-  editCard = () => {
-    this.props.editCard(
-      this.props.id,
-      this.state.inputName,
-      this.state.inputDescription
-    );
-  };
-
-  addComment = () => {
-    this.props.addComment(
-      this.props.actualUser,
-      this.state.inputComment,
-      this.props.id
-    );
+  removeValueInput = () => {
+    this.setState({
+      inputComment: ""
+    });
   };
 
   editControl = () => {
-    if (this.props.actualUser.name === this.props.autor) {
+    const {
+      isOpen,
+      changeIsOpenEditModal,
+      id,
+      actualUser,
+      autor,
+      editCard
+    } = this.props;
+    const { inputName, inputDescription } = this.state;
+
+    if (actualUser.name === autor) {
       return (
         <Button
           color="primary"
           onClick={e => {
-            this.editCard();
-            this.props.changeIsOpenEditModal(this.props.isOpen);
+            editCard(id, inputName, inputDescription);
+
+            changeIsOpenEditModal(isOpen);
           }}
         >
           Изменить карточку
@@ -66,17 +67,28 @@ class ModalCard extends React.Component {
   };
 
   render() {
+    const {
+      editComment,
+      isOpen,
+      changeIsOpenEditModal,
+      id,
+      actualUser,
+      deleteComment,
+      addComment,
+      comments
+    } = this.props;
+    const { inputName, inputDescription, inputComment } = this.state;
     const button = this.editControl();
-    const comments = this.props.comments.map(comment => {
-      if (comment.idCard === this.props.id) {
+    const commentsLocal = comments.map(comment => {
+      if (comment.idCard === id) {
         return (
           <Comment
             key={comment.id}
             id={comment.id}
             autor={comment.autor.name}
             text={comment.text}
-            deleteComment={this.props.deleteComment}
-            editComment={this.props.editComment}
+            deleteComment={deleteComment}
+            editComment={editComment}
           />
         );
       }
@@ -84,10 +96,10 @@ class ModalCard extends React.Component {
 
     return (
       <div>
-        <Modal isOpen={this.props.isOpen}>
+        <Modal isOpen={isOpen}>
           <ModalHeader
             toggle={e => {
-              this.props.changeIsOpenEditModal(this.props.isOpen);
+              changeIsOpenEditModal(isOpen);
             }}
           >
             Изменить карточку
@@ -97,7 +109,7 @@ class ModalCard extends React.Component {
               Card name
               <Input
                 id="inputCardName"
-                value={this.state.inputName}
+                value={inputName}
                 onChange={this.onChangeHandler}
               />
             </label>
@@ -107,7 +119,7 @@ class ModalCard extends React.Component {
               Card description
               <Input
                 id="inputCardDescription"
-                value={this.state.inputDescription}
+                value={inputDescription}
                 onChange={this.onChangeHandler}
               />
             </label>
@@ -121,14 +133,20 @@ class ModalCard extends React.Component {
               Коментарий
               <Input
                 id="inputComment"
-                value={this.state.inputComment}
+                value={inputComment}
                 onChange={this.onChangeHandler}
               />
             </label>
-            <Button color="primary" onClick={this.addComment}>
+            <Button
+              color="primary"
+              onClick={() => {
+                addComment(actualUser, inputComment, id);
+                this.removeValueInput();
+              }}
+            >
               Добавить коментарий
             </Button>
-            {comments}
+            {commentsLocal}
           </ModalBody>
         </Modal>
       </div>

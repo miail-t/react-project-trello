@@ -9,10 +9,6 @@ class UserСard extends Component {
     isOpenEditModal: false
   };
 
-  deleteCard = () => {
-    this.props.deleteCard(this.props.id, this.props.autor);
-  };
-
   changeIsOpenEditModal = state => {
     this.setState({
       isOpenEditModal: !state
@@ -20,21 +16,42 @@ class UserСard extends Component {
   };
 
   render() {
+    const {
+      id,
+      name,
+      columnName,
+      autor,
+      text,
+      actualUser,
+      comments,
+      editCard,
+      addComment,
+      deleteComment,
+      editComment,
+      deleteCard
+    } = this.props;
+
+    const { isOpenEditModal } = this.state;
+
     return (
       <div className="card">
         <Toast>
-          <ToastHeader toggle={this.deleteCard} className="card-header">
-            {this.props.name}
+          <ToastHeader
+            toggle={() => {
+              deleteCard(id, autor);
+            }}
+          >
+            {name}
           </ToastHeader>
-          <ToastBody>Description: {this.props.text}</ToastBody>
-          <div>Column: {this.props.columnName}</div>
+          <ToastBody>Description: {text}</ToastBody>
+          <div>Column: {columnName}</div>
           <br />
-          <div>Autor: {this.props.autor}</div>
+          <div>Autor: {autor}</div>
           <br />
           <Button
             color="primary"
             onClick={e => {
-              this.changeIsOpenEditModal(this.state.isOpenEditModal);
+              this.changeIsOpenEditModal(isOpenEditModal);
             }}
           >
             Изменить
@@ -42,18 +59,18 @@ class UserСard extends Component {
         </Toast>
 
         <EditModal
-          isOpen={this.state.isOpenEditModal}
-          id={this.props.id}
-          name={this.props.name}
-          text={this.props.text}
-          autor={this.props.autor}
-          actualUser={this.props.actualUser}
-          comments={this.props.comments}
+          isOpen={isOpenEditModal}
+          id={id}
+          name={name}
+          text={text}
+          autor={autor}
+          actualUser={actualUser}
+          comments={comments}
           changeIsOpenEditModal={this.changeIsOpenEditModal}
-          editCard={this.props.editCard}
-          addComment={this.props.addComment}
-          deleteComment={this.props.deleteComment}
-          editComment={this.props.editComment}
+          editCard={editCard}
+          addComment={addComment}
+          deleteComment={deleteComment}
+          editComment={editComment}
         />
       </div>
     );
