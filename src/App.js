@@ -3,6 +3,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Main from "./components/Main/Main";
 import Header from "./components/Header/Header";
+import { conect } from 'react-redux';
 
 const columnsDefault = [
   { id: 1, name: "TODO" },

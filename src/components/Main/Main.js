@@ -53,7 +53,6 @@ Main.propTypes = {
   addComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
   editComment: PropTypes.func.isRequired,
-
   actualUser: PropTypes.object.isRequired,
   column: PropTypes.array.isRequired,
   cards: PropTypes.array.isRequired,
