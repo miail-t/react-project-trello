@@ -3,7 +3,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Main from "./components/Main/Main";
 import Header from "./components/Header/Header";
-import { conect } from 'react-redux';
+import { connect } from 'react-redux'
 
 const columnsDefault = [
   { id: 1, name: "TODO" },
@@ -236,6 +236,7 @@ class App extends Component {
   };
 
   render() {
+    console.log(this.props.testStore)
     const { actualUser, isOpen, column, cards, comments } = this.state;
     return (
       <div className="App">
@@ -264,4 +265,9 @@ class App extends Component {
     );
   }
 }
-export default App;
+export default connect(
+  state =>({
+    testStore: state
+  }),
+  dispatch =>({})
+)(App);
