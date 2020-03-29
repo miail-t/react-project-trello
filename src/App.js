@@ -3,17 +3,18 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Main from "./components/Main/Main";
 import Header from "./components/Header/Header";
-import { connect } from 'react-redux'
+import * as action from "./actions";
+import { connect } from "react-redux";
 
-const columnsDefault = [
+/* const columnsDefault = [
   { id: 1, name: "TODO" },
   { id: 2, name: "In Progress" },
   { id: 3, name: "Testing" },
   { id: 4, name: "Done" }
-];
+]; */
 
 class App extends Component {
-  state = {
+ /*  state = {
     actualUser: {},
     users: [],
     column: [],
@@ -96,6 +97,7 @@ class App extends Component {
         id: this.createId(users),
         name: username
       };
+      this.props.updateUser(newUser);
       usersLocal = users.concat(newUser);
       localStorage.setItem("actualUser", JSON.stringify(newUser));
       localStorage.setItem("users", JSON.stringify(usersLocal));
@@ -184,20 +186,17 @@ class App extends Component {
   };
 
   deleteComment = (id, autor) => {
-    const {comments,actualUser} = this.state
+    const { comments, actualUser } = this.state;
     if (autor === actualUser.name) {
-      const commentsLocal = comments.filter(
-        comment => id !== comment.id
-      )
-      localStorage.setItem('comments', JSON.stringify(commentsLocal))
+      const commentsLocal = comments.filter(comment => id !== comment.id);
+      localStorage.setItem("comments", JSON.stringify(commentsLocal));
       this.setState({
-        comments: JSON.parse(localStorage.getItem('comments'))
-      })
+        comments: JSON.parse(localStorage.getItem("comments"))
+      });
     } else {
-      alert("Вы не можети удалить чужой коментарий ")
+      alert("Вы не можети удалить чужой коментарий ");
     }
-  }
-
+  };
 
   editComment = (id, autor, value) => {
     const { comments, actualUser } = this.state;
@@ -234,20 +233,21 @@ class App extends Component {
     });
     localStorage.setItem("column", JSON.stringify(columns));
   };
-
+ */
   render() {
-    console.log(this.props.testStore)
-    const { actualUser, isOpen, column, cards, comments } = this.state;
+  //  console.log(this.props);
+  //  console.log(this.props.testStore);
+   // const { actualUser, isOpen, column, cards, comments } = this.state;
     return (
       <div className="App">
         <Header
-          actualUser={actualUser}
+          /* actualUser={actualUser}
           isOpen={isOpen}
           signIn={this.signIn}
-          logOff={this.logOff}
+          logOff={this.logOff} */
         />
-        <Main
-          //function
+     {/*    <Main
+           //function
           addCard={this.addCard}
           editNameColumn={this.editNameColumn}
           deleteCard={this.deleteCard}
@@ -259,15 +259,19 @@ class App extends Component {
           actualUser={actualUser}
           column={column}
           cards={cards}
-          comments={comments}
-        />
+          comments={comments} 
+        /> */}
       </div>
     );
   }
 }
-export default connect(
-  state =>({
-    testStore: state
-  }),
-  dispatch =>({})
-)(App);
+const mapStateToProps = state => ({
+  actualUser: state.actualUser
+});
+
+const mapDispatchToProps = {
+  addUser: action.addUser,
+  updateUser: action.updateUser
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
