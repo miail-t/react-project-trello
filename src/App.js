@@ -246,8 +246,8 @@ class App extends Component {
           signIn={this.signIn}
           logOff={this.logOff} */
         />
-     {/*    <Main
-           //function
+         <Main
+        /*    //function
           addCard={this.addCard}
           editNameColumn={this.editNameColumn}
           deleteCard={this.deleteCard}
@@ -259,8 +259,8 @@ class App extends Component {
           actualUser={actualUser}
           column={column}
           cards={cards}
-          comments={comments} 
-        /> */}
+          comments={comments}  */
+        /> 
       </div>
     );
   }

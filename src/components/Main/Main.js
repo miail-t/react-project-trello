@@ -3,9 +3,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import PropTypes from "prop-types";
 import "./main.css";
 import Column from "../Column/Column";
+import * as action from "../../actions";
+import { connect } from "react-redux";
 
 class Main extends React.Component {
   render() {
+    
     const {
       actualUser,
       addCard,
@@ -17,12 +20,16 @@ class Main extends React.Component {
       editComment,
       cards,
       createCard,
-      comments
+      comments,
+      column
     } = this.props;
-
-    let column = this.props.column.map(elem => (
+    console.log(column)
+    let columns = column.map(elem => (
       <Column
-        key={elem.name + elem.id}
+      key={elem.name + elem.id}
+      columnName={elem.name} 
+      id={elem.id}
+        /* key={elem.name + elem.id}
         actualUser={actualUser}
         addCard={addCard}
         editNameColumn={editNameColumn}
@@ -32,20 +39,30 @@ class Main extends React.Component {
         deleteComment={deleteComment}
         editComment={editComment}
         columnName={elem.name}
-        id={elem.id}
+       
         cards={cards}
         createCard={createCard}
-        comments={comments}
+        comments={comments} */
       />
     ));
 
-    return <div className="main-row">{column}</div>;
+    return <div className="main-row">{columns}</div>;
   }
 }
 
-export default Main;
+const mapStateToProps = state => ({
+  actualUser: state.actualUser,
+  column: state.column
+});
 
-Main.propTypes = {
+const mapDispatchToProps = {
+  //addUser: action.addUser,
+  // updateUser: action.updateUser
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
+
+/* Main.propTypes = {
   addCard: PropTypes.func.isRequired,
   editNameColumn: PropTypes.func.isRequired,
   deleteCard: PropTypes.func.isRequired,
@@ -58,3 +75,4 @@ Main.propTypes = {
   cards: PropTypes.array.isRequired,
   comments: PropTypes.array.isRequired
 };
+ */

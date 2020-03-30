@@ -24,13 +24,25 @@ class Header extends Component {
         isOpen: true
       });
     } else {
-      alert();
     }
+  }
+
+  logOff = () => {
+    this.props.updateUser({});
+    this.setState({
+      isOpen: true
+    });
+  };
+
+  closeModal = () => {
+    this.setState({
+      isOpen: false
+    });
   }
 
   render() {
     console.log(this.props);
-    const { actualUser, logOff, signIn } = this.props;
+    const { actualUser, logOff } = this.props;
     const { isOpen } = this.state;
     return (
       <div>
@@ -41,12 +53,14 @@ class Header extends Component {
             <Nav className="ml-auto" navbar>
               <NavItem>
                 <span>{actualUser.name}</span>
-                <Button color="primary" /* onClick={logOff} */>Выйти</Button>
+                <Button color="primary" onClick={this.logOff}>
+                  Выйти
+                </Button>
               </NavItem>
             </Nav>
           </Collapse>
         </Navbar>
-        <WelcomModal isOpen={isOpen} signIn={signIn} />
+        <WelcomModal isOpen={isOpen} closeModal={this.closeModal} />
       </div>
     );
   }

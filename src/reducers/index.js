@@ -7,7 +7,7 @@ import comments from "./reducerComments";
 
 const rootReducer = combineReducers({
   actualUser: actualUser,
-  card: reducersCard,
+  cards: reducersCard,
   users: users,
   column: column,
   comments: comments

@@ -1,11 +1,4 @@
-
-
-const initialState = [
-  { id: 0, text: "q" },
-  { id: 1, text: "w" },
-  { id: 2, text: "e" },
-  { id: 3, text: "r" }
-];
+const initialState = [];
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -14,8 +7,7 @@ export default (state = initialState, action) => {
       return [...state];
     case "DELETE_ITEM":
       const newState = state.filter(item => item.text !== action.item);
-      
-      
+
       console.log("DELETE" + newState);
       return newState;
     default:

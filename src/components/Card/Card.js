@@ -58,7 +58,7 @@ class UserСard extends Component {
           </Button>
         </Toast>
 
-        <EditModal
+      {/*   <EditModal
           isOpen={isOpenEditModal}
           id={id}
           name={name}
@@ -71,7 +71,7 @@ class UserСard extends Component {
           addComment={addComment}
           deleteComment={deleteComment}
           editComment={editComment}
-        />
+        /> */}
       </div>
     );
   }
@@ -79,7 +79,7 @@ class UserСard extends Component {
 
 export default UserСard;
 
-UserСard.propType = {
+/* UserСard.propType = {
   actualUser: PropTypes.object.isRequired,
   comments: PropTypes.array.isRequired,
   id: PropTypes.number.isRequired,
@@ -93,4 +93,4 @@ UserСard.propType = {
   addComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
   editComment: PropTypes.func.isRequired
-};
+}; */

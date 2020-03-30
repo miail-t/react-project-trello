@@ -8,8 +8,29 @@ import {
   Input
 } from "reactstrap";
 import PropTypes from "prop-types";
+import * as action from "../../../actions";
+import { connect } from "react-redux";
 
 class ModalCard extends React.Component {
+  addCard = (autor, columnId, columnName) => {
+    const { cards } = this.state;
+    const card = {
+      id: this.createId(cards),
+      name: document.getElementById("inputCardName").value,
+      text: document.getElementById("inputCardDescription").value,
+      autor,
+      columnId,
+      columnName:"sda"
+    };
+    this.props.addCard(card);
+
+   /*  const cardsLocal = cards.concat(card);
+    localStorage.setItem("cards", JSON.stringify(cardsLocal));
+    this.setState({
+      cards: cardsLocal
+    }); */
+  };
+
   render() {
     const {
       addCard,
@@ -42,7 +63,7 @@ class ModalCard extends React.Component {
               color="primary"
               onClick={e => {
                 addCard(autor.name, columnId, columnName);
-                changeIsOpenCreateCard(isOpen);
+                //changeIsOpenCreateCard(isOpen);
               }}
             >
               Создать карточку
@@ -54,9 +75,22 @@ class ModalCard extends React.Component {
   }
 }
 
-export default ModalCard;
+const mapStateToProps = state => ({
+  actualUser: state.actualUser,
+  column: state.column,
+  cards: state.cards
+});
 
-ModalCard.propType = {
+const mapDispatchToProps = {
+  editColumnName: action.editColumnName,
+  addCard: action.addCard
+  //addUser: action.addUser,
+  // updateUser: action.updateUser
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalCard);
+
+/* ModalCard.propType = {
   isOpen: PropTypes.bool.isRequired,
   autor: PropTypes.object.isRequired,
   columnId: PropTypes.number.isRequired,
@@ -65,3 +99,4 @@ ModalCard.propType = {
   changeIsOpenCreateCard: PropTypes.func.isRequired,
   addCard: PropTypes.func.isRequired
 };
+ */

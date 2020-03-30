@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import UserСard from "../Card/Card";
 import ModalCard from "../Column/ModalCreateCard/index";
 import "./Column.css";
+import * as action from "../../actions";
+import { connect } from "react-redux";
 
 class Column extends Component {
   state = {
@@ -24,9 +26,17 @@ class Column extends Component {
     });
   };
 
+  editNameColumn = () => {
+    const newColumn = {
+      id: this.props.id,
+      name: this.state.columnNameValue
+    };
+    this.props.editColumnName(newColumn);
+  };
+
   render() {
     const {
-      id,
+      /*  id,
       cards,
       columnName,
       actualUser,
@@ -37,7 +47,12 @@ class Column extends Component {
       deleteComment,
       editComment,
       addCard,
-      editNameColumn
+      editNameColumn */
+      id,
+      cards,
+      columnName,
+      column,
+      actualUser
     } = this.props;
 
     const { columnNameValue, isOpenCreateCard } = this.state;
@@ -53,14 +68,14 @@ class Column extends Component {
             text={elem.text}
             columnName={columnName}
             autor={elem.autor}
-            actualUser={actualUser}
+            /*  actualUser={actualUser}
             comments={comments}
             //function
             deleteCard={deleteCard}
             editCard={editCard}
             addComment={addComment}
             deleteComment={deleteComment}
-            editComment={editComment}
+            editComment={editComment} */
           />
         );
       }
@@ -74,7 +89,7 @@ class Column extends Component {
             plaintext
             onChange={this.valueChageHandler}
             value={columnNameValue}
-            onBlur={e => editNameColumn(id, columnNameValue)}
+            onBlur={e => this.editNameColumn(column.id, columnNameValue)}
           />
           {card}
           <Button
@@ -86,24 +101,38 @@ class Column extends Component {
             Создать карточку
           </Button>
         </Card>
+        
         <ModalCard
           //function
-          addCard={addCard}
+         // addCard={addCard}
           changeIsOpenCreateCard={this.changeIsOpenCreateCard}
           //props
           isOpen={isOpenCreateCard}
           autor={actualUser}
           columnId={id}
           columnName={columnName}
-        />
+        /> 
       </div>
     );
   }
 }
 
-export default Column;
+const mapStateToProps = state => ({
+  actualUser: state.actualUser,
+  column: state.column,
+  cards: state.cards
+});
 
-Column.propTypes = {
+const mapDispatchToProps = {
+  editColumnName: action.editColumnName
+  //addUser: action.addUser,
+  // updateUser: action.updateUser
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Column);
+
+{
+  /* Column.propTypes = {
   addCard: PropTypes.func.isRequired,
   editNameColumn: PropTypes.func.isRequired,
   deleteCard: PropTypes.func.isRequired,
@@ -118,3 +147,5 @@ Column.propTypes = {
   cards: PropTypes.array.isRequired,
   comments: PropTypes.array.isRequired
 };
+ */
+}

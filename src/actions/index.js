@@ -6,3 +6,10 @@ export function addUser(user) {
 export function updateUser(user) {
   return { type: "UPDATE_ACTUAL_USER", user };
 }
+export function editColumnName(column) {
+  return { type: "EDIT_NAME_COLUMN", column };
+}
+export function addCard(card) {
+  return { type: "ADD_CARD", card };
+}
+

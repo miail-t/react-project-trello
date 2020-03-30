@@ -11,15 +11,37 @@ import {
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import * as action from "../../actions";
-
-
+import createId from "../../createId";
 
 class WelcomModal extends React.Component {
+  signIn = () => {
+    const { users } = this.props;
+    let username = document.getElementById("input").value;
+    let checkNewUser = true;
 
+    if (users !== null) {
+      users.forEach(elem => {
+        if (elem.name === username) {
+          checkNewUser = false;
+        }
+      });
+    }
+    if (checkNewUser === true) {
+      const newUser = {
+        id: createId(users),
+        name: username
+      };
+      this.props.addUser(newUser);
+      this.props.updateUser(newUser);
+    } else {
+      let user = users.filter(elem => elem.name === username);
+      this.props.updateUser(user);
+    }
+    this.props.closeModal();
+  };
 
-  
   render() {
-    const { isOpen, signIn } = this.props;
+    const { isOpen } = this.props;
     return (
       <div>
         <Modal isOpen={isOpen}>
@@ -31,7 +53,7 @@ class WelcomModal extends React.Component {
             </InputGroup>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={signIn}>
+            <Button color="primary" onClick={this.signIn}>
               Войти
             </Button>
           </ModalFooter>
@@ -42,7 +64,8 @@ class WelcomModal extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  actualUser: state.actualUser
+  actualUser: state.actualUser,
+  users: state.users
 });
 
 const mapDispatchToProps = {
@@ -54,5 +77,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(WelcomModal);
 
 WelcomModal.propType = {
   isOpen: PropTypes.bool.isRequired,
-  signIn: PropTypes.func.isRequired
+  closeModal: PropTypes.func.isRequired
 };
