@@ -67,13 +67,6 @@ class UserСard extends Component {
           text={description}
           autor={autor}
           changeIsOpenEditModal={this.changeIsOpenEditModal}
-         /*  actualUser={actualUser}
-          comments={comments}
-          changeIsOpenEditModal={this.changeIsOpenEditModal}
-          editCard={editCard}
-          addComment={addComment}
-          deleteComment={deleteComment}
-          editComment={editComment} */
         />{" "}
         
       </div>

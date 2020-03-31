@@ -1,15 +1,15 @@
 import { combineReducers } from "redux";
-import actualUser from "./reducerActualUser";
+import reducersactualUser from "./reducerActualUser";
 import reducersCard from "./reducerCard";
-import users from "./reducerUsers";
-import column from "./reducerColumn";
-import comments from "./reducerComments";
+import reducersusers from "./reducerUsers";
+import reducerscolumn from "./reducerColumn";
+import reducerscomments from "./reducerComments";
 
 const rootReducer = combineReducers({
-  actualUser: actualUser,
+  actualUser: reducersactualUser,
   cards: reducersCard,
-  users: users,
-  column: column,
-  comments: comments
+  users: reducersusers,
+  column: reducerscolumn,
+  comments: reducerscomments
 });
 export default rootReducer;

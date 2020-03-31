@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 
 class ModalCard extends React.Component {
   addCard = (autor, columnId, columnName) => {
-    const card1 = {
+    const card = {
       id: createId(this.props.cards),
       name: document.getElementById("inputCardName").value,
       description: document.getElementById("inputCardDescription").value,
@@ -22,7 +22,7 @@ class ModalCard extends React.Component {
       columnId,
       columnName
     };
-    this.props.addCard(card1);
+    this.props.addCard(card);
   };
 
   render() {

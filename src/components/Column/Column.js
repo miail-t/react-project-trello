@@ -36,18 +36,6 @@ class Column extends Component {
 
   render() {
     const {
-      /*  id,
-      cards,
-      columnName,
-      actualUser,
-      comments,
-      deleteCard,
-      editCard,
-      addComment,
-      deleteComment,
-      editComment,
-      addCard,
-      editNameColumn */
       id,
       cards,
       columnName,
@@ -68,14 +56,6 @@ class Column extends Component {
             description={elem.description}
             columnName={columnName}
             autor={elem.autor}
-            /*  actualUser={actualUser}
-            comments={comments}
-            //function
-            deleteCard={deleteCard}
-            editCard={editCard}
-            addComment={addComment}
-            deleteComment={deleteComment}
-            editComment={editComment} */
           />
         );
       }

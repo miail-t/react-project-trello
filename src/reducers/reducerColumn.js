@@ -7,8 +7,7 @@ const initialState = [
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case "EDIT_NAME_COLUMN":
-      console.log(action);
+    case "EDIT_NAME_COLUMN": {
       const columns = state.map(elem => {
         if (elem.id === action.column.id) {
           return { ...elem, name: action.column.name };
@@ -16,6 +15,7 @@ export default (state = initialState, action) => {
         return elem;
       });
       return [...columns];
+    }
     default:
       return state;
   }

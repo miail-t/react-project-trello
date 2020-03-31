@@ -58,7 +58,6 @@ class ModalCard extends React.Component {
           color="primary"
           onClick={e => {
             editCard(id, inputName, inputDescription);
-
             changeIsOpenEditModal(isOpen);
           }}
         >
@@ -80,21 +79,11 @@ class ModalCard extends React.Component {
   };
 
   render() {
-    const {
-      editComment,
-      isOpen,
-      changeIsOpenEditModal,
-      id,
-      actualUser,
-      deleteComment,
-      addComment,
-      comments
-    } = this.props;
+    const { isOpen, changeIsOpenEditModal, id, comments } = this.props;
     const {
       inputName,
       inputDescription,
       inputComment,
-      isOpenEditModal
     } = this.state;
     const button = this.editControl();
     const commentsLocal = comments.map(comment => {
@@ -105,8 +94,6 @@ class ModalCard extends React.Component {
             id={comment.id}
             autor={comment.autor.name}
             text={comment.text}
-            /*  deleteComment={deleteComment}
-            editComment={editComment} */
           />
         );
       }

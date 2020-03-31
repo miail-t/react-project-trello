@@ -31,11 +31,25 @@ class WelcomModal extends React.Component {
         id: createId(users),
         name: username
       };
-      this.props.addUser(newUser);
       this.props.updateUser(newUser);
+      this.props.addUser(newUser);
     } else {
-      let user = users.filter(elem => elem.name === username);
-      this.props.updateUser(user);
+      console.log(username);
+      let u;
+      let user = users.map(elem => {
+        if (elem.name === username) {
+          u = {
+            id: elem.id,
+            name: elem.name
+          };
+        }
+      });
+      /* console.log(user)
+      const u = {
+        id: user.id,
+        name: user.name
+      } */
+      this.props.updateUser(u);
     }
     this.props.closeModal();
   };

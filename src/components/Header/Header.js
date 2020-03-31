@@ -24,6 +24,9 @@ class Header extends Component {
         isOpen: true
       });
     } else {
+      this.setState({
+        isOpen: false
+      });
     }
   }
 
@@ -38,12 +41,13 @@ class Header extends Component {
     this.setState({
       isOpen: false
     });
-  }
+  };
+  
 
   render() {
-    console.log(this.props);
     const { actualUser } = this.props;
     const { isOpen } = this.state;
+   
     return (
       <div>
         <Navbar color="light" light expand="md">
@@ -52,7 +56,7 @@ class Header extends Component {
           <Collapse navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <span>{actualUser.name}</span>
+              <span>{actualUser.name}</span>
                 <Button color="primary" onClick={this.logOff}>
                   Выйти
                 </Button>
