@@ -8,32 +8,25 @@ import {
   Input
 } from "reactstrap";
 import PropTypes from "prop-types";
+import createId from "../../../createId";
 import * as action from "../../../actions";
 import { connect } from "react-redux";
 
 class ModalCard extends React.Component {
   addCard = (autor, columnId, columnName) => {
-    const { cards } = this.state;
-    const card = {
-      id: this.createId(cards),
+    const card1 = {
+      id: createId(this.props.cards),
       name: document.getElementById("inputCardName").value,
-      text: document.getElementById("inputCardDescription").value,
+      description: document.getElementById("inputCardDescription").value,
       autor,
       columnId,
-      columnName:"sda"
+      columnName
     };
-    this.props.addCard(card);
-
-   /*  const cardsLocal = cards.concat(card);
-    localStorage.setItem("cards", JSON.stringify(cardsLocal));
-    this.setState({
-      cards: cardsLocal
-    }); */
+    this.props.addCard(card1);
   };
 
   render() {
     const {
-      addCard,
       autor,
       columnId,
       columnName,
@@ -62,8 +55,8 @@ class ModalCard extends React.Component {
             <Button
               color="primary"
               onClick={e => {
-                addCard(autor.name, columnId, columnName);
-                //changeIsOpenCreateCard(isOpen);
+                this.addCard(autor.name, columnId, columnName);
+                changeIsOpenCreateCard(isOpen);
               }}
             >
               Создать карточку
@@ -76,16 +69,11 @@ class ModalCard extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  actualUser: state.actualUser,
-  column: state.column,
   cards: state.cards
 });
 
 const mapDispatchToProps = {
-  editColumnName: action.editColumnName,
   addCard: action.addCard
-  //addUser: action.addUser,
-  // updateUser: action.updateUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalCard);

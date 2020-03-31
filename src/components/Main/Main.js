@@ -3,47 +3,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import PropTypes from "prop-types";
 import "./main.css";
 import Column from "../Column/Column";
-import * as action from "../../actions";
 import { connect } from "react-redux";
 
 class Main extends React.Component {
   render() {
-    
-    const {
-      actualUser,
-      addCard,
-      editNameColumn,
-      deleteCard,
-      editCard,
-      addComment,
-      deleteComment,
-      editComment,
-      cards,
-      createCard,
-      comments,
-      column
-    } = this.props;
-    console.log(column)
+    const { column } = this.props;
+    console.log(column);
     let columns = column.map(elem => (
-      <Column
-      key={elem.name + elem.id}
-      columnName={elem.name} 
-      id={elem.id}
-        /* key={elem.name + elem.id}
-        actualUser={actualUser}
-        addCard={addCard}
-        editNameColumn={editNameColumn}
-        deleteCard={deleteCard}
-        editCard={editCard}
-        addComment={addComment}
-        deleteComment={deleteComment}
-        editComment={editComment}
-        columnName={elem.name}
-       
-        cards={cards}
-        createCard={createCard}
-        comments={comments} */
-      />
+      <Column key={elem.name + elem.id} columnName={elem.name} id={elem.id} />
     ));
 
     return <div className="main-row">{columns}</div>;
@@ -51,14 +18,10 @@ class Main extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  actualUser: state.actualUser,
   column: state.column
 });
 
-const mapDispatchToProps = {
-  //addUser: action.addUser,
-  // updateUser: action.updateUser
-};
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
 

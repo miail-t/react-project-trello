@@ -12,4 +12,18 @@ export function editColumnName(column) {
 export function addCard(card) {
   return { type: "ADD_CARD", card };
 }
-
+export function deleteCard(id) {
+  return { type: "DELETE_CARD", id };
+}
+export function editCard(id, name, description) {
+  return { type: "EDIT_CARD", id, name, description };
+}
+export function addComment(comment) {
+  return { type: "ADD_COMMENT", comment };
+}
+export function deleteComment(id) {
+  return { type: "DELETE_COMMENT", id };
+}
+export function editComment(id, text) {
+  return { type: "EDIT_COMMENT", id, text };
+}

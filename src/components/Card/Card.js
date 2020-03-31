@@ -3,16 +3,26 @@ import { Button, ToastBody, ToastHeader, Toast } from "reactstrap";
 import PropTypes from "prop-types";
 import "./Card.css";
 import EditModal from "./EditModal/index";
+import { connect } from "react-redux";
+import * as action from "../../actions";
 
 class UserСard extends Component {
-  state = {
+   state = {
     isOpenEditModal: false
   };
-
-  changeIsOpenEditModal = state => {
+ 
+   changeIsOpenEditModal = state => {
     this.setState({
       isOpenEditModal: !state
     });
+  }; 
+
+  deleteCard = () => {
+    if (this.props.autor === this.props.actualUser.name) {
+      this.props.deleteCard(this.props.id);
+    } else {
+      alert("Вы не можети удалить чужую карточку");
+    }
   };
 
   render() {
@@ -21,14 +31,7 @@ class UserСard extends Component {
       name,
       columnName,
       autor,
-      text,
-      actualUser,
-      comments,
-      editCard,
-      addComment,
-      deleteComment,
-      editComment,
-      deleteCard
+      description, 
     } = this.props;
 
     const { isOpenEditModal } = this.state;
@@ -38,12 +41,12 @@ class UserСard extends Component {
         <Toast>
           <ToastHeader
             toggle={() => {
-              deleteCard(id, autor);
+              this.deleteCard();
             }}
           >
             {name}
           </ToastHeader>
-          <ToastBody>Description: {text}</ToastBody>
+          <ToastBody>Description: {description}</ToastBody>
           <div>Column: {columnName}</div>
           <br />
           <div>Autor: {autor}</div>
@@ -57,27 +60,37 @@ class UserСard extends Component {
             Изменить
           </Button>
         </Toast>
-
-      {/*   <EditModal
+        <EditModal
           isOpen={isOpenEditModal}
           id={id}
           name={name}
-          text={text}
+          text={description}
           autor={autor}
-          actualUser={actualUser}
+          changeIsOpenEditModal={this.changeIsOpenEditModal}
+         /*  actualUser={actualUser}
           comments={comments}
           changeIsOpenEditModal={this.changeIsOpenEditModal}
           editCard={editCard}
           addComment={addComment}
           deleteComment={deleteComment}
-          editComment={editComment}
-        /> */}
+          editComment={editComment} */
+        />{" "}
+        
       </div>
     );
   }
 }
 
-export default UserСard;
+const mapStateToProps = state => ({
+  actualUser: state.actualUser,
+  column: state.column
+});
+
+const mapDispatchToProps = {
+  deleteCard: action.deleteCard
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserСard);
 
 /* UserСard.propType = {
   actualUser: PropTypes.object.isRequired,

@@ -2,6 +2,9 @@ import React from "react";
 import { Button, Modal, ModalHeader, ModalBody, Input } from "reactstrap";
 import PropTypes from "prop-types";
 import Comment from "../Comment/index";
+import { connect } from "react-redux";
+import * as action from "../../../actions";
+import createId from "../../../createId";
 
 class ModalCard extends React.Component {
   state = {
@@ -26,6 +29,16 @@ class ModalCard extends React.Component {
     this.setState({
       inputComment: ""
     });
+  };
+
+  addComment = (text, idCard) => {
+    let comment = {
+      id: createId(this.props.comments),
+      autor: this.props.actualUser,
+      text,
+      idCard
+    };
+    this.props.addComment(comment);
   };
 
   editControl = () => {
@@ -77,7 +90,12 @@ class ModalCard extends React.Component {
       addComment,
       comments
     } = this.props;
-    const { inputName, inputDescription, inputComment } = this.state;
+    const {
+      inputName,
+      inputDescription,
+      inputComment,
+      isOpenEditModal
+    } = this.state;
     const button = this.editControl();
     const commentsLocal = comments.map(comment => {
       if (comment.idCard === id) {
@@ -87,8 +105,8 @@ class ModalCard extends React.Component {
             id={comment.id}
             autor={comment.autor.name}
             text={comment.text}
-            deleteComment={deleteComment}
-            editComment={editComment}
+            /*  deleteComment={deleteComment}
+            editComment={editComment} */
           />
         );
       }
@@ -140,7 +158,7 @@ class ModalCard extends React.Component {
             <Button
               color="primary"
               onClick={() => {
-                addComment(actualUser, inputComment, id);
+                this.addComment(inputComment, id);
                 this.removeValueInput();
               }}
             >
@@ -154,9 +172,20 @@ class ModalCard extends React.Component {
   }
 }
 
-export default ModalCard;
+const mapStateToProps = state => ({
+  actualUser: state.actualUser,
+  column: state.column,
+  comments: state.comments
+});
 
-ModalCard.propType = {
+const mapDispatchToProps = {
+  editCard: action.editCard,
+  addComment: action.addComment
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalCard);
+
+/* ModalCard.propType = {
   isOpen: PropTypes.bool.isRequired,
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
@@ -171,3 +200,4 @@ ModalCard.propType = {
   deleteComment: PropTypes.func.isRequired,
   editComment: PropTypes.func.isRequired
 };
+ */

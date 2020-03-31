@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Toast, ToastHeader, ToastBody, Input } from "reactstrap";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import * as action from "../../../actions";
 
 class Comment extends Component {
   state = {
@@ -13,13 +15,29 @@ class Comment extends Component {
     });
   };
 
+  deleteComment = (id, autor) => {
+    if (autor === this.props.actualUser.name) {
+      this.props.deleteComment(id);
+    } else {
+      alert("Вы не можети удалить чужой коментарий ");
+    }
+  };
+
+  editComment = id => {
+    if (this.props.autor === this.props.actualUser.name) {
+      this.props.editComment(id, this.state.commentValue);
+    } else {
+      alert("Вы не можети редактировать чужой коментарий ");
+    }
+  };
+
   render() {
-    const { id, autor, deleteComment, editComment } = this.props;
-    const {commentValue} = this.state;
+    const { id, autor } = this.props;
+    const { commentValue } = this.state;
     return (
       <div className="p-3 bg-warning my-2 rounded">
         <Toast>
-          <ToastHeader toggle={() => deleteComment(id, autor)}>
+          <ToastHeader toggle={() => this.deleteComment(id, autor)}>
             {autor}
           </ToastHeader>
           <ToastBody>
@@ -27,7 +45,7 @@ class Comment extends Component {
               plaintext
               onChange={this.valueChageHandler}
               value={commentValue}
-              onBlur={() => editComment(id, autor, commentValue)}
+              onBlur={() => this.editComment(id)}
             />
           </ToastBody>
         </Toast>
@@ -35,11 +53,21 @@ class Comment extends Component {
     );
   }
 }
-export default Comment;
-Comment.propType = {
+const mapStateToProps = state => ({
+  actualUser: state.actualUser
+});
+
+const mapDispatchToProps = {
+  deleteComment: action.deleteComment,
+  editComment: action.editComment
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Comment);
+
+/* Comment.propType = {
   id: PropTypes.number.isRequired,
   autor: PropTypes.object.isRequired,
   text: PropTypes.string.isRequired,
   deleteComment: PropTypes.func.isRequired,
   editComment: PropTypes.func.isRequired
-};
+}; */

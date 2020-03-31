@@ -42,7 +42,7 @@ class Header extends Component {
 
   render() {
     console.log(this.props);
-    const { actualUser, logOff } = this.props;
+    const { actualUser } = this.props;
     const { isOpen } = this.state;
     return (
       <div>

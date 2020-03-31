@@ -65,7 +65,7 @@ class Column extends Component {
             //props
             id={elem.id}
             name={elem.name}
-            text={elem.text}
+            description={elem.description}
             columnName={columnName}
             autor={elem.autor}
             /*  actualUser={actualUser}
@@ -104,7 +104,6 @@ class Column extends Component {
         
         <ModalCard
           //function
-         // addCard={addCard}
           changeIsOpenCreateCard={this.changeIsOpenCreateCard}
           //props
           isOpen={isOpenCreateCard}
@@ -125,8 +124,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   editColumnName: action.editColumnName
-  //addUser: action.addUser,
-  // updateUser: action.updateUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Column);
