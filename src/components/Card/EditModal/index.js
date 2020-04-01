@@ -176,5 +176,5 @@ ModalCard.propType = {
 
   changeIsOpenEditModal: PropTypes.func.isRequired,
   editCard: PropTypes.func.isRequired,
-  addComment: PropTypes.func.isRequired
+  addComment: PropTypes.func.isRequired,
 };
