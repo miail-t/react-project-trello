@@ -7,41 +7,38 @@ import { connect } from "react-redux";
 import * as action from "../../actions";
 
 class UserСard extends Component {
-   state = {
+  state = {
     isOpenEditModal: false
   };
- 
-   changeIsOpenEditModal = state => {
+
+  
+
+  changeIsOpenEditModal = state => {
     this.setState({
       isOpenEditModal: !state
     });
-  }; 
+  };
 
   deleteCard = () => {
-    if (this.props.autor === this.props.actualUser.name) {
-      this.props.deleteCard(this.props.id);
+    const { id, deleteCard, autor, actualUser } = this.props;
+    if (autor === actualUser.name) {
+      deleteCard(id);
     } else {
       alert("Вы не можети удалить чужую карточку");
     }
   };
 
   render() {
-    const {
-      id,
-      name,
-      columnName,
-      autor,
-      description, 
-    } = this.props;
+    const { id, name, columnName, autor, description } = this.props;
 
     const { isOpenEditModal } = this.state;
 
     return (
       <div className="card">
-        <Toast>
+        <Toast className="toast" >
           <ToastHeader
             toggle={() => {
-              this.deleteCard();
+              this.deleteCard(); 
             }}
           >
             {name}
@@ -58,17 +55,16 @@ class UserСard extends Component {
             }}
           >
             Изменить
-          </Button>
+          </Button>{" "}
+          <EditModal
+            isOpen={isOpenEditModal}
+            id={id}
+            name={name}
+            text={description}
+            autor={autor}
+            changeIsOpenEditModal={this.changeIsOpenEditModal}
+          />
         </Toast>
-        <EditModal
-          isOpen={isOpenEditModal}
-          id={id}
-          name={name}
-          text={description}
-          autor={autor}
-          changeIsOpenEditModal={this.changeIsOpenEditModal}
-        />{" "}
-        
       </div>
     );
   }
@@ -85,18 +81,14 @@ const mapDispatchToProps = {
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserСard);
 
-/* UserСard.propType = {
+UserСard.propType = {
   actualUser: PropTypes.object.isRequired,
   comments: PropTypes.array.isRequired,
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
   columnName: PropTypes.string.isRequired,
   autor: PropTypes.object.isRequired,
 
-  deleteCard: PropTypes.func.isRequired,
-  editCard: PropTypes.func.isRequired,
-  addComment: PropTypes.func.isRequired,
-  deleteComment: PropTypes.func.isRequired,
-  editComment: PropTypes.func.isRequired
-}; */
+  deleteCard: PropTypes.func.isRequired
+};

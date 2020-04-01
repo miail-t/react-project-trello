@@ -13,6 +13,13 @@ class ModalCard extends React.Component {
     inputComment: ""
   };
 
+  downEnter = event => {
+    const { isOpen, changeIsOpenEditModal } = this.props;
+    if (event.keyCode === 27) {
+      changeIsOpenEditModal(isOpen);
+    }
+  };
+
   onChangeHandler = e => {
     if (e.target.id === "inputCardName") {
       this.setState({ inputName: e.target.value });
@@ -31,61 +38,35 @@ class ModalCard extends React.Component {
     });
   };
 
-  addComment = (text, idCard) => {
-    let comment = {
-      id: createId(this.props.comments),
-      autor: this.props.actualUser,
-      text,
-      idCard
-    };
-    this.props.addComment(comment);
-  };
-
-  editControl = () => {
+  editCard = () => {
     const {
-      isOpen,
-      changeIsOpenEditModal,
       id,
-      actualUser,
       autor,
-      editCard
+      editCard,
+      actualUser,
+      isOpen,
+      changeIsOpenEditModal
     } = this.props;
     const { inputName, inputDescription } = this.state;
-
     if (actualUser.name === autor) {
-      return (
-        <Button
-          color="primary"
-          onClick={e => {
-            editCard(id, inputName, inputDescription);
-            changeIsOpenEditModal(isOpen);
-          }}
-        >
-          Изменить карточку
-        </Button>
-      );
+      editCard(id, inputName, inputDescription);
+      changeIsOpenEditModal(isOpen);
     } else {
-      return (
-        <Button
-          color="danger"
-          onClick={e => {
-            alert("Вы не можете изменить каточку");
-          }}
-        >
-          Изменить карточку
-        </Button>
-      );
+      alert("Вы не можете изменить каточку");
     }
   };
 
   render() {
-    const { isOpen, changeIsOpenEditModal, id, comments } = this.props;
     const {
-      inputName,
-      inputDescription,
-      inputComment,
-    } = this.state;
-    const button = this.editControl();
+      isOpen,
+      changeIsOpenEditModal,
+      id,
+      autor,
+      comments,
+      addComment,
+      actualUser
+    } = this.props;
+    const { inputName, inputDescription, inputComment } = this.state;
     const commentsLocal = comments.map(comment => {
       if (comment.idCard === id) {
         return (
@@ -100,7 +81,7 @@ class ModalCard extends React.Component {
     });
 
     return (
-      <div>
+      <div onKeyDown={this.downEnter}>
         <Modal isOpen={isOpen}>
           <ModalHeader
             toggle={e => {
@@ -129,7 +110,15 @@ class ModalCard extends React.Component {
               />
             </label>
             <br />
-            {button}
+
+            <Button
+              color={actualUser.name === autor ? "primary" : "danger"}
+              onClick={e => {
+                this.editCard();
+              }}
+            >
+              Изменить карточку
+            </Button>
           </ModalBody>
 
           <ModalHeader>Коментарии:</ModalHeader>
@@ -145,7 +134,12 @@ class ModalCard extends React.Component {
             <Button
               color="primary"
               onClick={() => {
-                this.addComment(inputComment, id);
+                addComment({
+                  id: createId(this.props.comments),
+                  autor: this.props.actualUser,
+                  text: inputComment,
+                  idCard: id
+                });
                 this.removeValueInput();
               }}
             >
@@ -161,7 +155,6 @@ class ModalCard extends React.Component {
 
 const mapStateToProps = state => ({
   actualUser: state.actualUser,
-  column: state.column,
   comments: state.comments
 });
 
@@ -172,7 +165,7 @@ const mapDispatchToProps = {
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalCard);
 
-/* ModalCard.propType = {
+ModalCard.propType = {
   isOpen: PropTypes.bool.isRequired,
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
@@ -183,8 +176,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(ModalCard);
 
   changeIsOpenEditModal: PropTypes.func.isRequired,
   editCard: PropTypes.func.isRequired,
-  addComment: PropTypes.func.isRequired,
-  deleteComment: PropTypes.func.isRequired,
-  editComment: PropTypes.func.isRequired
+  addComment: PropTypes.func.isRequired
 };
- */

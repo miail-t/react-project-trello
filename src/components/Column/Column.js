@@ -26,21 +26,13 @@ class Column extends Component {
     });
   };
 
-  editNameColumn = () => {
-    const newColumn = {
-      id: this.props.id,
-      name: this.state.columnNameValue
-    };
-    this.props.editColumnName(newColumn);
-  };
-
   render() {
     const {
       id,
       cards,
       columnName,
-      column,
-      actualUser
+      actualUser,
+      editColumnName
     } = this.props;
 
     const { columnNameValue, isOpenCreateCard } = this.state;
@@ -50,7 +42,6 @@ class Column extends Component {
         return (
           <UserСard
             key={elem.id + elem.name}
-            //props
             id={elem.id}
             name={elem.name}
             description={elem.description}
@@ -69,7 +60,12 @@ class Column extends Component {
             plaintext
             onChange={this.valueChageHandler}
             value={columnNameValue}
-            onBlur={e => this.editNameColumn(column.id, columnNameValue)}
+            onBlur={e =>
+              editColumnName({
+                id: this.props.id,
+                name: this.state.columnNameValue
+              })
+            }
           />
           {card}
           <Button
@@ -81,7 +77,7 @@ class Column extends Component {
             Создать карточку
           </Button>
         </Card>
-        
+
         <ModalCard
           //function
           changeIsOpenCreateCard={this.changeIsOpenCreateCard}
@@ -90,7 +86,7 @@ class Column extends Component {
           autor={actualUser}
           columnId={id}
           columnName={columnName}
-        /> 
+        />
       </div>
     );
   }
@@ -98,7 +94,6 @@ class Column extends Component {
 
 const mapStateToProps = state => ({
   actualUser: state.actualUser,
-  column: state.column,
   cards: state.cards
 });
 
@@ -108,21 +103,7 @@ const mapDispatchToProps = {
 
 export default connect(mapStateToProps, mapDispatchToProps)(Column);
 
-{
-  /* Column.propTypes = {
-  addCard: PropTypes.func.isRequired,
-  editNameColumn: PropTypes.func.isRequired,
-  deleteCard: PropTypes.func.isRequired,
-  editCard: PropTypes.func.isRequired,
-  addComment: PropTypes.func.isRequired,
-  deleteComment: PropTypes.func.isRequired,
-  editComment: PropTypes.func.isRequired,
-
-  actualUser: PropTypes.object.isRequired,
+Column.propTypes = {
   columnName: PropTypes.string.isRequired,
-  id: PropTypes.number.isRequired,
-  cards: PropTypes.array.isRequired,
-  comments: PropTypes.array.isRequired
+  id: PropTypes.number.isRequired
 };
- */
-}

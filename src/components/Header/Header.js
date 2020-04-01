@@ -8,7 +8,6 @@ import {
   NavItem,
   Button
 } from "reactstrap";
-import PropTypes from "prop-types";
 import WelcomModal from "../WelcomModal/WelcomModal";
 import * as action from "../../actions";
 import { connect } from "react-redux";
@@ -42,12 +41,11 @@ class Header extends Component {
       isOpen: false
     });
   };
-  
 
   render() {
     const { actualUser } = this.props;
     const { isOpen } = this.state;
-   
+
     return (
       <div>
         <Navbar color="light" light expand="md">
@@ -56,7 +54,7 @@ class Header extends Component {
           <Collapse navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-              <span>{actualUser.name}</span>
+                <span>{actualUser.name}</span>
                 <Button color="primary" onClick={this.logOff}>
                   Выйти
                 </Button>
@@ -71,8 +69,7 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => ({
-  actualUser: state.actualUser,
-  card: state.card
+  actualUser: state.actualUser
 });
 
 const mapDispatchToProps = {
@@ -81,10 +78,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
-
-/* Header.propTypes = {
-  actualUser: PropTypes.object.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  signIn: PropTypes.func.isRequired,
-  logOff: PropTypes.func.isRequired
-}; */

@@ -14,19 +14,18 @@ import * as action from "../../actions";
 import createId from "../../createId";
 
 class WelcomModal extends React.Component {
+
+  downEnter = event => {
+    if (event.keyCode === 13) {
+      this.signIn();
+    }
+  };
+
   signIn = () => {
     const { users } = this.props;
-    let username = document.getElementById("input").value;
-    let checkNewUser = true;
+    let username = document.getElementById("input").value; 
 
-    if (users !== null) {
-      users.forEach(elem => {
-        if (elem.name === username) {
-          checkNewUser = false;
-        }
-      });
-    }
-    if (checkNewUser === true) {
+    if (users) {
       const newUser = {
         id: createId(users),
         name: username
@@ -34,23 +33,10 @@ class WelcomModal extends React.Component {
       this.props.updateUser(newUser);
       this.props.addUser(newUser);
     } else {
-      console.log(username);
-      let u;
-      let user = users.map(elem => {
-        if (elem.name === username) {
-          u = {
-            id: elem.id,
-            name: elem.name
-          };
-        }
-      });
-      /* console.log(user)
-      const u = {
-        id: user.id,
-        name: user.name
-      } */
-      this.props.updateUser(u);
+      let user = users.map(elem => elem.name === username);
+      this.props.updateUser(user);
     }
+
     this.props.closeModal();
   };
 
@@ -58,7 +44,7 @@ class WelcomModal extends React.Component {
     const { isOpen } = this.props;
     return (
       <div>
-        <Modal isOpen={isOpen}>
+        <Modal isOpen={isOpen} onKeyDown={this.downEnter}>
           <ModalHeader>А че ты такой не авторизованный?</ModalHeader>
           <ModalBody>
             Добавте свое имя, пожалуйста

@@ -15,17 +15,20 @@ class Comment extends Component {
     });
   };
 
-  deleteComment = (id, autor) => {
-    if (autor === this.props.actualUser.name) {
-      this.props.deleteComment(id);
+  deleteComment = () => {
+    const { id, autor,actualUser,deleteComment } = this.props;
+    if (autor === actualUser.name) {
+      deleteComment(id);
     } else {
       alert("Вы не можети удалить чужой коментарий ");
     }
   };
 
-  editComment = id => {
-    if (this.props.autor === this.props.actualUser.name) {
-      this.props.editComment(id, this.state.commentValue);
+  editComment = () => {
+    const { id, autor,actualUser,editComment } = this.props;
+    const { commentValue } = this.state;
+    if (autor === actualUser.name) {
+      editComment(id,commentValue);
     } else {
       alert("Вы не можети редактировать чужой коментарий ");
     }
@@ -64,10 +67,11 @@ const mapDispatchToProps = {
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comment);
 
-/* Comment.propType = {
+ Comment.propType = {
   id: PropTypes.number.isRequired,
   autor: PropTypes.object.isRequired,
   text: PropTypes.string.isRequired,
+  
   deleteComment: PropTypes.func.isRequired,
   editComment: PropTypes.func.isRequired
-}; */
+}; 

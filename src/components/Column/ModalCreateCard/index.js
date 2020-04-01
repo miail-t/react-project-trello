@@ -13,28 +13,41 @@ import * as action from "../../../actions";
 import { connect } from "react-redux";
 
 class ModalCard extends React.Component {
-  addCard = (autor, columnId, columnName) => {
-    const card = {
-      id: createId(this.props.cards),
-      name: document.getElementById("inputCardName").value,
-      description: document.getElementById("inputCardDescription").value,
-      autor,
-      columnId,
-      columnName
-    };
-    this.props.addCard(card);
+  downEnter = event => {
+    const { changeIsOpenCreateCard, isOpen } = this.props;
+    if (event.keyCode === 13) {
+      this.addCard();
+    }
+    if (event.keyCode === 27) {
+      changeIsOpenCreateCard(isOpen);
+    }
   };
 
-  render() {
+  addCard = () => {
     const {
       autor,
       columnId,
       columnName,
       changeIsOpenCreateCard,
-      isOpen
+      isOpen,
+      addCard,
+      cards
     } = this.props;
+    addCard({
+      id: createId(cards),
+      name: document.getElementById("inputCardName").value,
+      description: document.getElementById("inputCardDescription").value,
+      autor: autor.name,
+      columnId,
+      columnName
+    });
+    changeIsOpenCreateCard(isOpen);
+  };
+
+  render() {
+    const { changeIsOpenCreateCard, isOpen } = this.props;
     return (
-      <div>
+      <div onKeyDown={this.downEnter}>
         <Modal isOpen={isOpen}>
           <ModalHeader toggle={e => changeIsOpenCreateCard(isOpen)}>
             Создайте карту
@@ -44,7 +57,6 @@ class ModalCard extends React.Component {
               Card name
               <Input id="inputCardName" placeholder="Card name" />
             </label>
-
             <br />
             <label>
               Card description
@@ -55,8 +67,7 @@ class ModalCard extends React.Component {
             <Button
               color="primary"
               onClick={e => {
-                this.addCard(autor.name, columnId, columnName);
-                changeIsOpenCreateCard(isOpen);
+                this.addCard();
               }}
             >
               Создать карточку
@@ -78,13 +89,11 @@ const mapDispatchToProps = {
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalCard);
 
-/* ModalCard.propType = {
+ModalCard.propType = {
   isOpen: PropTypes.bool.isRequired,
   autor: PropTypes.object.isRequired,
   columnId: PropTypes.number.isRequired,
   columnName: PropTypes.string.isRequired,
 
-  changeIsOpenCreateCard: PropTypes.func.isRequired,
-  addCard: PropTypes.func.isRequired
+  changeIsOpenCreateCard: PropTypes.func.isRequired
 };
- */
