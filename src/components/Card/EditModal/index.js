@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Modal, ModalHeader, ModalBody, Input } from "reactstrap";
 import PropTypes from "prop-types";
 import Comment from "../Comment/index";
@@ -6,151 +6,126 @@ import { connect } from "react-redux";
 import * as action from "../../../actions";
 import createId from "../../../createId";
 
-class ModalCard extends React.Component {
-  state = {
-    inputName: this.props.name,
-    inputDescription: this.props.text,
-    inputComment: ""
-  };
+function ModalCard({
+  isOpen,
+  id,
+  name,
+  text,
+  autor,
+  actualUser,
+  comments,
+  changeIsOpenEditModal,
+  editCard,
+  addComment
+}) {
+  const [inputName, changeInputName] = useState(name);
+  const [inputDescription, changeInputDescription] = useState(text);
+  const [inputComment, changeInputComment] = useState("");
 
-  downEnter = event => {
-    const { isOpen, changeIsOpenEditModal } = this.props;
+  const downEnter = event => {
     if (event.keyCode === 27) {
-      changeIsOpenEditModal(isOpen);
+      changeIsOpenEditModal(!isOpen);
     }
   };
 
-  onChangeHandler = e => {
-    if (e.target.id === "inputCardName") {
-      this.setState({ inputName: e.target.value });
-    }
-    if (e.target.id === "inputCardDescription") {
-      this.setState({ inputDescription: e.target.value });
-    }
-    if (e.target.id === "inputComment") {
-      this.setState({ inputComment: e.target.value });
-    }
+  const removeValueInput = () => {
+    changeInputComment("");
   };
 
-  removeValueInput = () => {
-    this.setState({
-      inputComment: ""
-    });
-  };
-
-  editCard = () => {
-    const {
-      id,
-      autor,
-      editCard,
-      actualUser,
-      isOpen,
-      changeIsOpenEditModal
-    } = this.props;
-    const { inputName, inputDescription } = this.state;
+  const edit = () => {
+    // edit card
     if (actualUser.name === autor) {
       editCard(id, inputName, inputDescription);
-      changeIsOpenEditModal(isOpen);
+       changeIsOpenEditModal(!isOpen); 
     } else {
       alert("Вы не можете изменить каточку");
     }
   };
 
-  render() {
-    const {
-      isOpen,
-      changeIsOpenEditModal,
-      id,
-      autor,
-      comments,
-      addComment,
-      actualUser
-    } = this.props;
-    const { inputName, inputDescription, inputComment } = this.state;
-    const commentsLocal = comments.map(comment => {
-      if (comment.idCard === id) {
-        return (
-          <Comment
-            key={comment.id}
-            id={comment.id}
-            autor={comment.autor.name}
-            text={comment.text}
-          />
-        );
-      }
-    });
+  const commentsLocal = comments.map(comment => {
+    if (comment.idCard === id) {
+      return (
+        <Comment
+          key={comment.id}
+          id={comment.id}
+          autor={comment.autor.name}
+          text={comment.text}
+        />
+      );
+    }
+    return null;
+  });
 
-    return (
-      <div onKeyDown={this.downEnter}>
-        <Modal isOpen={isOpen}>
-          <ModalHeader
-            toggle={e => {
-              changeIsOpenEditModal(isOpen);
+  return (
+    <div onKeyDown={downEnter}>
+      <Modal isOpen={isOpen}>
+        <ModalHeader
+          toggle={e => {
+            changeIsOpenEditModal(!isOpen);
+          }}
+        >
+          Изменить карточку
+        </ModalHeader>
+        <ModalBody>
+          <label>
+            Card name
+            <Input
+              id="inputCardName"
+              value={inputName}
+              onChange={e => changeInputName(e.target.value)}
+            />
+          </label>
+
+          <br />
+          <label>
+            Card description
+            <Input
+              id="inputCardDescription"
+              value={inputDescription}
+              onChange={e => changeInputDescription(e.target.value)}
+            />
+          </label>
+          <br />
+
+          <Button
+            color={actualUser.name === autor ? "primary" : "danger"}
+            onClick={e => {
+              edit(); // edit card
             }}
           >
             Изменить карточку
-          </ModalHeader>
-          <ModalBody>
-            <label>
-              Card name
-              <Input
-                id="inputCardName"
-                value={inputName}
-                onChange={this.onChangeHandler}
-              />
-            </label>
+          </Button>
+        </ModalBody>
 
-            <br />
-            <label>
-              Card description
-              <Input
-                id="inputCardDescription"
-                value={inputDescription}
-                onChange={this.onChangeHandler}
-              />
-            </label>
-            <br />
-
-            <Button
-              color={actualUser.name === autor ? "primary" : "danger"}
-              onClick={e => {
-                this.editCard();
-              }}
-            >
-              Изменить карточку
-            </Button>
-          </ModalBody>
-
-          <ModalHeader>Коментарии:</ModalHeader>
-          <ModalBody>
-            <label>
-              Коментарий
-              <Input
-                id="inputComment"
-                value={inputComment}
-                onChange={this.onChangeHandler}
-              />
-            </label>
-            <Button
-              color="primary"
-              onClick={() => {
-                addComment({
-                  id: createId(this.props.comments),
-                  autor: this.props.actualUser,
-                  text: inputComment,
-                  idCard: id
-                });
-                this.removeValueInput();
-              }}
-            >
-              Добавить коментарий
-            </Button>
-            {commentsLocal}
-          </ModalBody>
-        </Modal>
-      </div>
-    );
-  }
+        <ModalHeader>Коментарии:</ModalHeader>
+        <ModalBody>
+          <label>
+            Коментарий
+            <Input
+              id="inputComment"
+              value={inputComment}
+              onChange={e => changeInputComment(e.target.value)}
+            />
+          </label>
+          <Button
+            color="primary"
+            onClick={() => {
+              addComment({
+                id: createId(comments),
+                autor: actualUser,
+                text: inputComment,
+                idCard: id
+              });
+              removeValueInput();
+            }}
+          >
+            Добавить коментарий
+          </Button>
+          {commentsLocal}
+        </ModalBody>
+      </Modal>
+    </div>
+  );
 }
 
 const mapStateToProps = state => ({
@@ -176,5 +151,5 @@ ModalCard.propType = {
 
   changeIsOpenEditModal: PropTypes.func.isRequired,
   editCard: PropTypes.func.isRequired,
-  addComment: PropTypes.func.isRequired,
+  addComment: PropTypes.func.isRequired
 };

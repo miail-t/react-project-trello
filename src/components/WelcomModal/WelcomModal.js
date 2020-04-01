@@ -13,58 +13,52 @@ import { connect } from "react-redux";
 import * as action from "../../actions";
 import createId from "../../createId";
 
-class WelcomModal extends React.Component {
-
-  downEnter = event => {
+function WelcomModal({ isOpen, closeModal, users, updateUser, addUser }) {
+  const downEnter = event => {
     if (event.keyCode === 13) {
-      this.signIn();
+      signIn();
     }
   };
 
-  signIn = () => {
-    const { users } = this.props;
-    let username = document.getElementById("input").value; 
+  const signIn = () => {
+    let username = document.getElementById("input").value;
 
     if (users) {
       const newUser = {
         id: createId(users),
         name: username
       };
-      this.props.updateUser(newUser);
-      this.props.addUser(newUser);
+      updateUser(newUser);
+      addUser(newUser);
     } else {
       let user = users.map(elem => elem.name === username);
-      this.props.updateUser(user);
+      updateUser(user);
     }
 
-    this.props.closeModal();
+    closeModal();
   };
 
-  render() {
-    const { isOpen } = this.props;
-    return (
-      <div>
-        <Modal isOpen={isOpen} onKeyDown={this.downEnter}>
-          <ModalHeader>А че ты такой не авторизованный?</ModalHeader>
-          <ModalBody>
-            Добавте свое имя, пожалуйста
-            <InputGroup>
-              <Input id="input" placeholder="username" />
-            </InputGroup>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={this.signIn}>
-              Войти
-            </Button>
-          </ModalFooter>
-        </Modal>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Modal isOpen={isOpen} onKeyDown={downEnter}>
+        <ModalHeader>А че ты такой не авторизованный?</ModalHeader>
+        <ModalBody>
+          Добавте свое имя, пожалуйста
+          <InputGroup>
+            <Input id="input" placeholder="username" />
+          </InputGroup>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={signIn}>
+            Войти
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </div>
+  );
 }
 
 const mapStateToProps = state => ({
-  actualUser: state.actualUser,
   users: state.users
 });
 

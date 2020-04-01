@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Collapse,
   Navbar,
@@ -7,45 +7,25 @@ import {
   Nav,
   NavItem,
   Button
-} from "reactstrap";
+} from "reactstrap"
 import WelcomModal from "../WelcomModal/WelcomModal";
 import * as action from "../../actions";
 import { connect } from "react-redux";
 
-class Header extends Component {
-  state = {
-    isOpen: false
-  };
-
-  componentDidMount() {
-    if (Object.keys(this.props.actualUser).length === 0) {
-      this.setState({
-        isOpen: true
-      });
+function Header({ actualUser, updateUser }){
+  const [isOpen, changeIsOpen] = useState(false);
+  useEffect(() => {
+    if (Object.keys(actualUser).length === 0) {
+      changeIsOpen(true)
     } else {
-      this.setState({
-        isOpen: false
-      });
+      changeIsOpen(false)
     }
-  }
+  },[actualUser])
 
-  logOff = () => {
-    this.props.updateUser({});
-    this.setState({
-      isOpen: true
-    });
+  const logOff = () => {
+    updateUser({});
+    changeIsOpen(true)
   };
-
-  closeModal = () => {
-    this.setState({
-      isOpen: false
-    });
-  };
-
-  render() {
-    const { actualUser } = this.props;
-    const { isOpen } = this.state;
-
     return (
       <div>
         <Navbar color="light" light expand="md">
@@ -54,26 +34,24 @@ class Header extends Component {
           <Collapse navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <span>{actualUser.name}</span>
-                <Button color="primary" onClick={this.logOff}>
+              <span>{actualUser.name}</span>
+                <Button color="primary" onClick={logOff}>
                   Выйти
                 </Button>
               </NavItem>
             </Nav>
           </Collapse>
         </Navbar>
-        <WelcomModal isOpen={isOpen} closeModal={this.closeModal} />
+        <WelcomModal isOpen={isOpen} closeModal={() => changeIsOpen(false)} />
       </div>
     );
-  }
 }
 
 const mapStateToProps = state => ({
-  actualUser: state.actualUser
+  actualUser: state.actualUser,
 });
 
 const mapDispatchToProps = {
-  addUser: action.addUser,
   updateUser: action.updateUser
 };
 
