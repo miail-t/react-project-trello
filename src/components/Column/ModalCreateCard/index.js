@@ -12,27 +12,25 @@ import createId from "../../../createId";
 import * as action from "../../../actions";
 import { connect } from "react-redux";
 
-class ModalCard extends React.Component {
-  downEnter = event => {
-    const { changeIsOpenCreateCard, isOpen } = this.props;
+function ModalCard({
+  isOpen,
+  changeIsOpenCard,
+  cards,
+  autor,
+  columnId,
+  columnName,
+  addCard
+}) {
+  const downEnter = event => {
     if (event.keyCode === 13) {
-      this.addCard();
+      createCard();
     }
     if (event.keyCode === 27) {
-      changeIsOpenCreateCard(isOpen);
+      changeIsOpenCard(!isOpen);
     }
   };
 
-  addCard = () => {
-    const {
-      autor,
-      columnId,
-      columnName,
-      changeIsOpenCreateCard,
-      isOpen,
-      addCard,
-      cards
-    } = this.props;
+  const createCard = () => {
     addCard({
       id: createId(cards),
       name: document.getElementById("inputCardName").value,
@@ -41,42 +39,39 @@ class ModalCard extends React.Component {
       columnId,
       columnName
     });
-    changeIsOpenCreateCard(isOpen);
+    changeIsOpenCard(!isOpen);
   };
 
-  render() {
-    const { changeIsOpenCreateCard, isOpen } = this.props;
-    return (
-      <div onKeyDown={this.downEnter}>
-        <Modal isOpen={isOpen}>
-          <ModalHeader toggle={e => changeIsOpenCreateCard(isOpen)}>
-            Создайте карту
-          </ModalHeader>
-          <ModalBody>
-            <label>
-              Card name
-              <Input id="inputCardName" placeholder="Card name" />
-            </label>
-            <br />
-            <label>
-              Card description
-              <Input id="inputCardDescription" placeholder="Description card" />
-            </label>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              color="primary"
-              onClick={e => {
-                this.addCard();
-              }}
-            >
-              Создать карточку
-            </Button>
-          </ModalFooter>
-        </Modal>
-      </div>
-    );
-  }
+  return (
+    <div onKeyDown={downEnter}>
+      <Modal isOpen={isOpen}>
+        <ModalHeader toggle={() => changeIsOpenCard(!isOpen)}>
+          Создайте карту
+        </ModalHeader>
+        <ModalBody>
+          <label>
+            Card name
+            <Input id="inputCardName" placeholder="Card name" />
+          </label>
+          <br />
+          <label>
+            Card description
+            <Input id="inputCardDescription" placeholder="Description card" />
+          </label>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            color="primary"
+            onClick={() => {
+              createCard();
+            }}
+          >
+            Создать карточку
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </div>
+  );
 }
 
 const mapStateToProps = state => ({
@@ -94,6 +89,5 @@ ModalCard.propType = {
   autor: PropTypes.object.isRequired,
   columnId: PropTypes.number.isRequired,
   columnName: PropTypes.string.isRequired,
-
-  changeIsOpenCreateCard: PropTypes.func.isRequired
+  changeIsOpenCard: PropTypes.func.isRequired
 };

@@ -1,22 +1,13 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Toast, ToastHeader, ToastBody, Input } from "reactstrap";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import * as action from "../../../actions";
 
-class Comment extends Component {
-  state = {
-    commentValue: this.props.text
-  };
+function Comment({ id, autor, text, deleteComment, editComment, actualUser }) {
+  const [commentValue, chageCommentValue] = useState(text);
 
-  valueChageHandler = e => {
-    this.setState({
-      commentValue: e.target.value
-    });
-  };
-
-  deleteComment = () => {
-    const { id, autor,actualUser,deleteComment } = this.props;
+  const removeComment = () => {
     if (autor === actualUser.name) {
       deleteComment(id);
     } else {
@@ -24,37 +15,30 @@ class Comment extends Component {
     }
   };
 
-  editComment = () => {
-    const { id, autor,actualUser,editComment } = this.props;
-    const { commentValue } = this.state;
+  const redactComment = () => {
     if (autor === actualUser.name) {
-      editComment(id,commentValue);
+      editComment(id, commentValue);
     } else {
       alert("Вы не можети редактировать чужой коментарий ");
+      chageCommentValue(text);
     }
   };
 
-  render() {
-    const { id, autor } = this.props;
-    const { commentValue } = this.state;
-    return (
-      <div className="p-3 bg-warning my-2 rounded">
-        <Toast>
-          <ToastHeader toggle={() => this.deleteComment(id, autor)}>
-            {autor}
-          </ToastHeader>
-          <ToastBody>
-            <Input
-              plaintext
-              onChange={this.valueChageHandler}
-              value={commentValue}
-              onBlur={() => this.editComment(id)}
-            />
-          </ToastBody>
-        </Toast>
-      </div>
-    );
-  }
+  return (
+    <div className="p-3 bg-warning my-2 rounded">
+      <Toast>
+        <ToastHeader toggle={() => removeComment()}>{autor}</ToastHeader>
+        <ToastBody>
+          <Input
+            plaintext
+            onChange={e => chageCommentValue(e.target.value)}
+            value={commentValue}
+            onBlur={() => redactComment()}
+          />
+        </ToastBody>
+      </Toast>
+    </div>
+  );
 }
 const mapStateToProps = state => ({
   actualUser: state.actualUser
@@ -67,11 +51,11 @@ const mapDispatchToProps = {
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comment);
 
- Comment.propType = {
+Comment.propType = {
   id: PropTypes.number.isRequired,
   autor: PropTypes.object.isRequired,
   text: PropTypes.string.isRequired,
-  
+
   deleteComment: PropTypes.func.isRequired,
   editComment: PropTypes.func.isRequired
-}; 
+};

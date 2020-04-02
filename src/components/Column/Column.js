@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Card, Button, Input } from "reactstrap";
 import PropTypes from "prop-types";
 import UserСard from "../Card/Card";
@@ -7,89 +7,67 @@ import "./Column.css";
 import * as action from "../../actions";
 import { connect } from "react-redux";
 
-class Column extends Component {
-  state = {
-    btnDropleft: false,
-    isOpenCreateCard: false,
-    columnNameValue: this.props.columnName
+function Column({ editColumnName, cards, actualUser, columnName, id }) {
+  const [isOpenCreateCard, changeIsOpenCard] = useState(false);
+  const [columnNameValue, changeColumnNameValue] = useState(columnName);
+
+  const valueChageHandler = e => {
+    changeColumnNameValue(e.target.value);
   };
 
-  changeIsOpenCreateCard = state => {
-    this.setState({
-      isOpenCreateCard: !state
-    });
-  };
-
-  valueChageHandler = e => {
-    this.setState({
-      columnNameValue: e.target.value
-    });
-  };
-
-  render() {
-    const {
-      id,
-      cards,
-      columnName,
-      actualUser,
-      editColumnName
-    } = this.props;
-
-    const { columnNameValue, isOpenCreateCard } = this.state;
-
-    let card = cards.map(elem => {
-      if (id === elem.columnId) {
-        return (
-          <UserСard
-            key={elem.id + elem.name}
-            id={elem.id}
-            name={elem.name}
-            description={elem.description}
-            columnName={columnName}
-            autor={elem.autor}
-          />
-        );
-      }
-    });
-
-    return (
-      <div>
-        <Card className="card-row">
-          <Input
-            className="inputColumn"
-            plaintext
-            onChange={this.valueChageHandler}
-            value={columnNameValue}
-            onBlur={e =>
-              editColumnName({
-                id: this.props.id,
-                name: this.state.columnNameValue
-              })
-            }
-          />
-          {card}
-          <Button
-            color="primary"
-            onClick={e => {
-              this.changeIsOpenCreateCard(isOpenCreateCard);
-            }}
-          >
-            Создать карточку
-          </Button>
-        </Card>
-
-        <ModalCard
-          //function
-          changeIsOpenCreateCard={this.changeIsOpenCreateCard}
-          //props
-          isOpen={isOpenCreateCard}
-          autor={actualUser}
-          columnId={id}
+  let card = cards.map(elem => {
+    if (id === elem.columnId) {
+      return (
+        <UserСard
+          key={elem.id + elem.name}
+          id={elem.id}
+          name={elem.name}
+          description={elem.description}
           columnName={columnName}
+          autor={elem.autor}
         />
-      </div>
-    );
-  }
+      );
+    }
+    return null;
+  });
+
+  return (
+    <div>
+      <Card className="card-row">
+        <Input
+          className="inputColumn"
+          plaintext
+          onChange={valueChageHandler}
+          value={columnNameValue}
+          onBlur={e =>
+            editColumnName({
+              id: id,
+              name: columnNameValue
+            })
+          }
+        />
+        {card}
+        <Button
+          color="primary"
+          onClick={e => {
+            changeIsOpenCard(!isOpenCreateCard);
+          }}
+        >
+          Создать карточку
+        </Button>
+      </Card>
+
+      <ModalCard
+        //function
+        changeIsOpenCard={changeIsOpenCard}
+        //props
+        isOpen={isOpenCreateCard}
+        autor={actualUser}
+        columnId={id}
+        columnName={columnName}
+      />
+    </div>
+  );
 }
 
 const mapStateToProps = state => ({
