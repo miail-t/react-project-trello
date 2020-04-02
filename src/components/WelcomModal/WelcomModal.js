@@ -12,6 +12,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import * as action from "../../actions";
 import createId from "../../createId";
+import * as selectors from "../../selectors"
 
 function WelcomModal({ isOpen, closeModal, users, updateUser, addUser }) {
   const downEnter = event => {
@@ -58,9 +59,9 @@ function WelcomModal({ isOpen, closeModal, users, updateUser, addUser }) {
   );
 }
 
-const mapStateToProps = state => ({
-  users: state.users
-});
+const mapStateToProps = state => {
+  return { users: selectors.getUsers(state) };
+};
 
 const mapDispatchToProps = {
   addUser: action.addUser,

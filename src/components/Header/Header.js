@@ -11,6 +11,7 @@ import {
 import WelcomModal from "../WelcomModal/WelcomModal";
 import * as action from "../../actions";
 import { connect } from "react-redux";
+import * as selectors from "../../selectors"
 
 function Header({ actualUser, updateUser }){
   const [isOpen, changeIsOpen] = useState(false);
@@ -47,9 +48,9 @@ function Header({ actualUser, updateUser }){
     );
 }
 
-const mapStateToProps = state => ({
-  actualUser: state.actualUser,
-});
+const mapStateToProps = state => {
+  return { actualUser: selectors.getActualUser(state) };
+};
 
 const mapDispatchToProps = {
   updateUser: action.updateUser

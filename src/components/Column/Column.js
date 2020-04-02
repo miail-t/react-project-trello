@@ -6,6 +6,7 @@ import ModalCard from "../Column/ModalCreateCard/index";
 import "./Column.css";
 import * as action from "../../actions";
 import { connect } from "react-redux";
+import * as selectors from '../../selectors'
 
 function Column({ editColumnName, cards, actualUser, columnName, id }) {
   const [isOpenCreateCard, changeIsOpenCard] = useState(false);
@@ -70,10 +71,12 @@ function Column({ editColumnName, cards, actualUser, columnName, id }) {
   );
 }
 
-const mapStateToProps = state => ({
-  actualUser: state.actualUser,
-  cards: state.cards
-});
+const mapStateToProps = state => {
+  return {
+    actualUser: selectors.getActualUser(state),
+    cards: selectors.getCards(state)
+  };
+};
 
 const mapDispatchToProps = {
   editColumnName: action.editColumnName

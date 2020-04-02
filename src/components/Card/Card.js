@@ -5,6 +5,7 @@ import "./Card.css";
 import EditModal from "./EditModal/index";
 import { connect } from "react-redux";
 import * as action from "../../actions";
+import * as selectors from "../../selectors";
 
 function UserСard({
   autor,
@@ -61,10 +62,12 @@ function UserСard({
   );
 }
 
-const mapStateToProps = state => ({
-  actualUser: state.actualUser,
-  column: state.column
-});
+const mapStateToProps = state => {
+  return {
+    actualUser: selectors.getActualUser(state),
+    column: selectors.getColumns(state)
+  };
+};
 
 const mapDispatchToProps = {
   deleteCard: action.deleteCard

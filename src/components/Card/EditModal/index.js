@@ -5,6 +5,7 @@ import Comment from "../Comment/index";
 import { connect } from "react-redux";
 import * as action from "../../../actions";
 import createId from "../../../createId";
+import * as selectors from '../../../selectors'
 
 function ModalCard({
   isOpen,
@@ -26,10 +27,6 @@ function ModalCard({
     if (event.keyCode === 27) {
       changeIsOpenEditModal(!isOpen);
     }
-  };
-
-  const removeValueInput = () => {
-    changeInputComment("");
   };
 
   const edit = () => {
@@ -62,6 +59,7 @@ function ModalCard({
         <ModalHeader
           toggle={e => {
             changeIsOpenEditModal(!isOpen);
+            changeInputComment("");
           }}
         >
           Изменить карточку
@@ -116,7 +114,7 @@ function ModalCard({
                 text: inputComment,
                 idCard: id
               });
-              removeValueInput();
+              changeInputComment("");
             }}
           >
             Добавить коментарий
@@ -128,10 +126,12 @@ function ModalCard({
   );
 }
 
-const mapStateToProps = state => ({
-  actualUser: state.actualUser,
-  comments: state.comments
-});
+const mapStateToProps = state => {
+  return {
+    actualUser: selectors.getActualUser(state),
+    comments: selectors.getComments(state)
+  };
+};
 
 const mapDispatchToProps = {
   editCard: action.editCard,

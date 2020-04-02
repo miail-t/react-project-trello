@@ -3,6 +3,7 @@ import { Toast, ToastHeader, ToastBody, Input } from "reactstrap";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import * as action from "../../../actions";
+import * as selectors from "../../../selectors";
 
 function Comment({ id, autor, text, deleteComment, editComment, actualUser }) {
   const [commentValue, chageCommentValue] = useState(text);
@@ -40,9 +41,9 @@ function Comment({ id, autor, text, deleteComment, editComment, actualUser }) {
     </div>
   );
 }
-const mapStateToProps = state => ({
-  actualUser: state.actualUser
-});
+const mapStateToProps = state => {
+  return { actualUser: selectors.getActualUser(state) };
+};
 
 const mapDispatchToProps = {
   deleteComment: action.deleteComment,

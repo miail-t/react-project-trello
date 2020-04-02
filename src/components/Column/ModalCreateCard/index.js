@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import createId from "../../../createId";
 import * as action from "../../../actions";
 import { connect } from "react-redux";
+import * as selectors from "../../../selectors";
 
 function ModalCard({
   isOpen,
@@ -41,7 +42,7 @@ function ModalCard({
     });
     changeIsOpenCard(!isOpen);
   };
-
+  ///console.log(selectors.getCards());
   return (
     <div onKeyDown={downEnter}>
       <Modal isOpen={isOpen}>
@@ -74,9 +75,9 @@ function ModalCard({
   );
 }
 
-const mapStateToProps = state => ({
-  cards: state.cards
-});
+const mapStateToProps = state => {
+  return { cards: selectors.getCards(state) };
+};
 
 const mapDispatchToProps = {
   addCard: action.addCard

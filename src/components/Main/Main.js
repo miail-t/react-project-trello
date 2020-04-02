@@ -2,6 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./main.css";
 import Column from "../Column/Column";
+import * as selectors from "../../selectors";
 import { connect } from "react-redux";
 
 function Main({ column }) {
@@ -12,8 +13,8 @@ function Main({ column }) {
   return <div className="main-row">{columns}</div>;
 }
 
-const mapStateToProps = state => ({
-  column: state.column
-});
+const mapStateToProps = state => {
+  return { column: selectors.getColumns(state) };
+};
 
 export default connect(mapStateToProps)(Main);
